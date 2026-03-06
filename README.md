@@ -1,6 +1,14 @@
 # Xcalibur.Weather.Models
 
+[![.NET 10](https://img.shields.io/badge/.NET-10.0-blue.svg)](https://dotnet.microsoft.com/)
+[![NuGet](https://img.shields.io/nuget/v/Xcalibur.Weather.Models.svg)](https://www.nuget.org/packages/Xcalibur.Weather.Models/)
+[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](LICENSE-2.0.txt)
+
 A comprehensive .NET library providing data models and DTOs for weather-related applications. This library serves as the foundation for weather data management, supporting multiple weather service providers and offering strongly-typed models for weather forecasting, air quality monitoring, and astronomical data.
+
+**Created by**: Joshua Arzt | **Company**: Xcalibur Systems, LLC.
+
+## 📋 Table of Contents
 
 ## Purpose
 
