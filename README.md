@@ -93,7 +93,7 @@ Xcalibur.Weather.Models/
 
 ## Related Projects
 
-- **Xcalibur.Weather.Models** - Core weather data models and enumerations
+- **Xcalibur.Weather.Helpers** - Core weather data models and enumerations
 - **Xcalibur.Weather.Services** - HTTP client services for weather APIs
 
 ## License
