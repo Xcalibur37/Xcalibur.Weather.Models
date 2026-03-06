@@ -8,8 +8,6 @@ A comprehensive .NET library providing data models and DTOs for weather-related 
 
 **Created by**: Joshua Arzt | **Company**: Xcalibur Systems, LLC.
 
-## 📋 Table of Contents
-
 ## Purpose
 
 **Xcalibur.Weather.Models** is designed to:
@@ -93,10 +91,23 @@ Xcalibur.Weather.Models/
 └── [Core Models]                  # Main forecast and data point models
 ```
 
+## Related Projects
+
+- **Xcalibur.Weather.Models** - Core weather data models and enumerations
+- **Xcalibur.Weather.Services** - HTTP client services for weather APIs
+
 ## License
 
-This project is maintained by Xcalibur37 and hosted on GitHub at [Xcalibur.Weather.Models](https://github.com/Xcalibur37/Xcalibur.Weather.Models).
+Copyright © 2006 - 2026, Xcalibur Systems, LLC - All Rights Reserved
 
-## Contributing
+Licensed under the Apache License, Version 2.0. See [LICENSE-2.0.txt](LICENSE-2.0.txt) for details.
 
-Contributions are welcome! Please feel free to submit issues or pull requests to improve the library.
+## Author
+
+**Joshua Arzt**  
+Xcalibur Systems, LLC
+
+---
+
+*Part of the Xcalibur Weather ecosystem for comprehensive weather data integration.*
+
