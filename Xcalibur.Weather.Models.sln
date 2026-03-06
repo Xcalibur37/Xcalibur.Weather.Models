@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 18
+VisualStudioVersion = 18.3.11520.95 d18.3
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xcalibur.Weather.Models", "Xcalibur.Weather.Models.csproj", "{0810B284-FD5B-00F5-F0C6-373D585EA855}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{0810B284-FD5B-00F5-F0C6-373D585EA855}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0810B284-FD5B-00F5-F0C6-373D585EA855}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0810B284-FD5B-00F5-F0C6-373D585EA855}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0810B284-FD5B-00F5-F0C6-373D585EA855}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {6A204D4F-E002-42FF-8190-98626DF3716B}
+	EndGlobalSection
+EndGlobal

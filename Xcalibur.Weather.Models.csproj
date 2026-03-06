@@ -1,0 +1,55 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>net10.0</TargetFramework>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+
+		<!-- NuGet Package Metadata -->
+		<PackageId>Xcalibur.Weather.Models</PackageId>
+		<Version>1.0.0</Version>
+		<Authors>Joshua Arzt</Authors>
+		<Company>Xcalibur Systems, LLC.</Company>
+		<Product>Xcalibur.Weather.Models</Product>
+		<Description>A comprehensive .NET library providing data models and DTOs for weather-related applications. Supports multiple weather service providers (OpenMeteo, Geocodio, IpGeo) with strongly-typed models for weather forecasting, air quality monitoring, and astronomical data.</Description>
+		<Copyright>Copyright © 2006 - 2026, Xcalibur Systems, LLC - All Rights Reserved</Copyright>
+		<RepositoryUrl>https://github.com/Xcalibur37/Xcalibur.Weather.Models</RepositoryUrl>
+		<RepositoryType>git</RepositoryType>
+		<PackageIcon>X_logo_512.png</PackageIcon>
+		<PackageTags>weather;forecast;openmeteo;geocoding;air-quality;astronomy;models;dto;weather-api;meteorology</PackageTags>
+		<PackageReleaseNotes>Initial release with comprehensive weather data models and provider support.</PackageReleaseNotes>
+		<PublishRepositoryUrl>true</PublishRepositoryUrl>
+		<EmbedUntrackedSources>true</EmbedUntrackedSources>
+		<PackageLicenseExpression></PackageLicenseExpression>
+		<PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+		<PackageLicenseFile>LICENSE-2.0.txt</PackageLicenseFile>
+		<GenerateDocumentationFile>True</GenerateDocumentationFile>
+		<PackageReadmeFile>README.md</PackageReadmeFile>
+		<IncludeSymbols>true</IncludeSymbols>
+		<SymbolPackageFormat>snupkg</SymbolPackageFormat>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)' == 'Release'">
+		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<None Include="F:\OneDrive\Xcalibur\Xcalibur Site\assets\logos\X_logo_512.png">
+			<Pack>True</Pack>
+			<PackagePath></PackagePath>
+		</None>
+		<None Include="F:\OneDrive\Xcalibur\_Resources\LICENSE-2.0.txt">
+			<Pack>True</Pack>
+			<PackagePath></PackagePath>
+		</None>
+	</ItemGroup>
+
+	<ItemGroup>
+		<None Include="README.md" Pack="true" PackagePath="\" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Xcalibur.Extensions.MVVM.V2" Version="1.0.4" />
+	</ItemGroup>
+
+</Project>
