@@ -141,7 +141,7 @@ Copyright © 2006 - 2026, Xcalibur Systems, LLC - All Rights Reserved
 
 *Part of the Xcalibur Weather ecosystem for comprehensive weather data integration.*
 
-## Contributing
+*Part of the Xcalibur Weather ecosystem for comprehensive weather data integration.*
 
 Contributions are welcome! Please feel free to submit issues or pull requests to improve the library.
 
