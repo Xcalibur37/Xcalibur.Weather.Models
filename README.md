@@ -1,6 +1,27 @@
 # Xcalibur.Weather.Models
 
+[![.NET 10](https://img.shields.io/badge/.NET-10.0-blue.svg)](https://dotnet.microsoft.com/)
+[![NuGet](https://img.shields.io/nuget/v/Xcalibur.Weather.Models.svg)](https://www.nuget.org/packages/Xcalibur.Weather.Models/)
+[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](LICENSE-2.0.txt)
+
 A comprehensive .NET library providing data models and DTOs for weather-related applications. This library serves as the foundation for weather data management, supporting multiple weather service providers and offering strongly-typed models for weather forecasting, air quality monitoring, and astronomical data.
+
+**Created by**: Joshua Arzt | **Company**: Xcalibur Systems, LLC.
+
+## 📋 Table of Contents
+
+- [Purpose](#purpose)
+- [Key Features](#key-features)
+  - [Weather Data Models](#weather-data-models)
+  - [Provider Support](#provider-support)
+  - [Utilities & Helpers](#utilities--helpers)
+  - [Data Types](#data-types)
+- [Technology](#technology)
+- [Use Cases](#use-cases)
+- [Installation](#-installation)
+- [Project Structure](#project-structure)
+- [License](#-license)
+- [Related Projects](#-related-projects)
 
 ## Purpose
 
@@ -56,6 +77,26 @@ The library includes comprehensive DTOs for:
   - Nullable reference types enabled
   - JSON serialization support
 
+## 📦 Installation
+
+Install via NuGet Package Manager:
+
+```bash
+dotnet add package Xcalibur.Weather.Models
+```
+
+Or via Package Manager Console:
+
+```powershell
+Install-Package Xcalibur.Weather.Models
+```
+
+Or add to your project file:
+
+```xml
+<PackageReference Include="Xcalibur.Weather.Models" Version="1.0.0" />
+```
+
 ## Use Cases
 
 This library is ideal for:
@@ -85,10 +126,26 @@ Xcalibur.Weather.Models/
 └── [Core Models]                  # Main forecast and data point models
 ```
 
-## License
+## 📄 License
 
-This project is maintained by Xcalibur37 and hosted on GitHub at [Xcalibur.Weather.Models](https://github.com/Xcalibur37/Xcalibur.Weather.Models).
+This project is licensed under the Apache License 2.0. See the [LICENSE-2.0.txt](LICENSE-2.0.txt) file for details.
+
+Copyright © 2006 - 2026, Xcalibur Systems, LLC - All Rights Reserved
+
+## 🔗 Related Projects
+
+- **[Xcalibur.Weather.Services](https://www.nuget.org/packages/Xcalibur.Weather.Services/)** - HTTP client services for weather APIs ([GitHub](https://github.com/Xcalibur37/Xcalibur.Weather.Services))
+- **[Xcalibur.Weather.Helpers](https://www.nuget.org/packages/Xcalibur.Weather.Helpers/)** - Utility functions and conversion helpers ([GitHub](https://github.com/Xcalibur37/Xcalibur.Weather.Helpers))
+
+---
+
+*Part of the Xcalibur Weather ecosystem for comprehensive weather data integration.*
 
 ## Contributing
 
 Contributions are welcome! Please feel free to submit issues or pull requests to improve the library.
+
+## Author
+
+**Joshua Arzt**  
+Xcalibur Systems, LLC
