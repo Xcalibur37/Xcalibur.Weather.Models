@@ -1,4 +1,5 @@
 ﻿using Xcalibur.Weather.Models.WeatherProvider.IpGeo.Astronomy;
+using Xcalibur.Weather.Models.WeatherProvider.SunriseSunset;
 
 namespace Xcalibur.Weather.Models
 {
@@ -66,12 +67,12 @@ namespace Xcalibur.Weather.Models
         public string? MoonIlluminationPercentage { get; set; }
 
         /// <summary>
-        /// Gets or sets the moon angle.
+        /// Gets or sets the golden hour time.
         /// </summary>
         /// <value>
-        /// The moon angle.
+        /// The golden hour.
         /// </value>
-        public double? MoonAngle { get; set; }
+        public string? GoldenHour { get; set; }
 
         #endregion
 
@@ -87,6 +88,16 @@ namespace Xcalibur.Weather.Models
             Map(data);
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SunMoonPoint"/> class
+        /// from a <see cref="SunriseSunsetResultModel"/>.
+        /// </summary>
+        /// <param name="data">The SunriseSunset.io result model.</param>
+        public SunMoonPoint(SunriseSunsetResultModel data)
+        {
+            Map(data);
+        }
+
         #endregion
 
         #region Methods
@@ -98,18 +109,36 @@ namespace Xcalibur.Weather.Models
         private void Map(AstronomyModel? data)
         {
             if (data is null) return;
-            
+
             // Sun
             Sunrise = data.Sunrise;
             Sunset = data.Sunset;
             DayLength = data.DayLength;
-            
+
             // Moon
             Moonrise = data.Moonrise;
             Moonset = data.Moonset;
             MoonPhase = data.MoonPhase;
             MoonIlluminationPercentage = data.MoonIlluminationPercentage;
-            MoonAngle = data.MoonAngle;
+        }
+
+        /// <summary>
+        /// Maps the specified data from a <see cref="SunriseSunsetResultModel"/>.
+        /// </summary>
+        /// <param name="data">The SunriseSunset.io result model.</param>
+        private void Map(SunriseSunsetResultModel data)
+        {
+            // Sun
+            Sunrise = data.Sunrise;
+            Sunset = data.Sunset;
+            DayLength = data.DayLength;
+
+            // Moon
+            Moonrise = data.Moonrise;
+            Moonset = data.Moonset;
+            MoonPhase = data.MoonPhase;
+            MoonIlluminationPercentage = data.MoonIllumination?.ToString("F2");
+            GoldenHour = data.GoldenHour;
         }
 
         #endregion

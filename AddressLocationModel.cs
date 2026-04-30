@@ -2,6 +2,7 @@
 using Xcalibur.Extensions.MVVM.V2.Models;
 using Xcalibur.Weather.Models.Helpers;
 using Xcalibur.Weather.Models.WeatherProvider.Geocodio;
+using Xcalibur.Weather.Models.WeatherProvider.OpenStreetMap;
 
 namespace Xcalibur.Weather.Models
 {
@@ -102,6 +103,16 @@ namespace Xcalibur.Weather.Models
             Map(data);
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="AddressLocationModel" /> class
+        /// from an OpenStreetMap result.
+        /// </summary>
+        /// <param name="data">The OpenStreetMap result.</param>
+        public AddressLocationModel(OpenStreetMapResult data)
+        {
+            Map(data);
+        }
+
         #endregion
 
         #region Methods
@@ -124,6 +135,27 @@ namespace Xcalibur.Weather.Models
             State = data.AddressComponents?.State;
             Zip = data.AddressComponents?.Zip;
             Country = data.AddressComponents?.Country;
+
+            // Key
+            Key = CreateKey();
+        }
+
+        /// <summary>
+        /// Maps the specified OpenStreetMap data.
+        /// </summary>
+        /// <param name="data">The data.</param>
+        private void Map(OpenStreetMapResult data)
+        {
+            // Location
+            Latitude = data.Lat ?? "0";
+            Longitude = data.Lon ?? "0";
+
+            // Address Components — city falls back to town then village
+            City = data.Address?.City ?? data.Address?.Town ?? data.Address?.Village;
+            County = data.Address?.County;
+            State = data.Address?.State;
+            Zip = data.Address?.Postcode;
+            Country = data.Address?.Country;
 
             // Key
             Key = CreateKey();
