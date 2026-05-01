@@ -55,6 +55,7 @@ The library includes DTOs for the following providers:
 - **OpenStreetMap / Nominatim**: Search result and nested address models for location lookup scenarios
 - **IpGeo Astronomy**: Astronomy, location, morning/evening, and sun/moon response models
 - **SunriseSunset.io**: Response and result models for sunrise, sunset, twilight, moonrise, moonset, azimuth, and illumination data
+- **Google Pollen API**: Forecast response, daily pollen info, plant info, pollen type info, index details, and related support models
 
 ### Utilities and Preferences
 
@@ -87,11 +88,12 @@ The library includes DTOs for the following providers:
   - `WeatherProvider.OpenStreetMap.*`
   - `WeatherProvider.IpGeo.Astronomy.*`
   - `WeatherProvider.SunriseSunset.*`
+  - `WeatherProvider.GooglePollen.Forecast.*`
 
 ## Technology
 
 - **Target Framework**: .NET 10
-- **Current Package Version**: 1.0.2
+- **Current Package Version**: 1.0.3
 - **Dependencies**:
   - Xcalibur.Extensions.MVVM.V2 (v1.0.4)
 - **Features**:
@@ -118,7 +120,7 @@ Install-Package Xcalibur.Weather.Models
 Or add to your project file:
 
 ```xml
-<PackageReference Include="Xcalibur.Weather.Models" Version="1.0.2" />
+<PackageReference Include="Xcalibur.Weather.Models" Version="1.0.3" />
 ```
 
 ## Use Cases
@@ -146,7 +148,8 @@ Xcalibur.Weather.Models/
 │   │   ├── DailyWeather/
 │   │   └── CurrentAirQuality/
 │   ├── OpenStreetMap/             # OpenStreetMap / Nominatim models
-│   └── SunriseSunset/             # SunriseSunset.io models
+│   ├── SunriseSunset/             # SunriseSunset.io models
+│   └── GooglePollen/              # Google Pollen API forecast models
 ├── Helpers/                       # Utility and helper classes
 ├── Preferences.cs                 # Shared preference enums
 └── [Core Models]                  # Forecast and location models
@@ -154,7 +157,16 @@ Xcalibur.Weather.Models/
 
 ## Latest Updates
 
-- Updated package version to **1.0.2**
+- Updated package version to **1.0.3**
+- Added **Google Pollen API** forecast models:
+  - `PollenForecastResponse`
+  - `DailyInfoModel`
+  - `ForecastDateModel`
+  - `IndexInfoModel`
+  - `PlantDescriptionModel`
+  - `PlantInfoModel`
+  - `PollenTypeInfoModel`
+  - `ColorModel`
 - Added **SunriseSunset.io** response models:
   - `SunriseSunsetResponse`
   - `SunriseSunsetResultModel`
