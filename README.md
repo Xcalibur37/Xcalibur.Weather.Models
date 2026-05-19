@@ -28,8 +28,8 @@ A .NET 10 model library for weather, air quality, geocoding, and astronomy appli
 **Xcalibur.Weather.Models** is designed to:
 
 - Provide standardized data models for weather applications
-- Support integration with multiple provider APIs including Open-Meteo, Geocodio, OpenStreetMap, IpGeo, and SunriseSunset.io
-- Deliver strongly-typed DTOs for current weather, hourly forecasts, daily forecasts, air quality, geocoding, and astronomy data
+- Support integration with multiple provider APIs including Open-Meteo, Geocodio, OpenStreetMap, IpGeo, SunriseSunset.io, Google Pollen, and Google Weather Alerts
+- Deliver strongly-typed DTOs for current weather, hourly forecasts, daily forecasts, air quality, geocoding, astronomy, pollen, and weather alert data
 - Provide reusable forecast point models for application-level weather presentation
 - Offer location and address models for forward geocoding and lookup scenarios
 - Centralize weather-related preference enums and helper methods
@@ -45,6 +45,8 @@ A .NET 10 model library for weather, air quality, geocoding, and astronomy appli
 - **SunMoonPoint**: Sun and moon-related data for astronomy and daylight features
 - **AddressLocationModel**: Application-facing location model for resolved addresses and coordinates
 - **PrecipitationTile** and **DoubleRange**: Supporting models for precipitation display and value ranges
+- **PollenInformation**: App-facing pollen forecast including daily breakdowns, pollen types, and plant-level detail
+- **WeatherAlertInformation**: App-facing weather alert data including severity, certainty, urgency, instructions, and timing
 
 ### Provider Models
 
@@ -56,6 +58,7 @@ The library includes DTOs for the following providers:
 - **IpGeo Astronomy**: Astronomy, location, morning/evening, and sun/moon response models
 - **SunriseSunset.io**: Response and result models for sunrise, sunset, twilight, moonrise, moonset, azimuth, and illumination data
 - **Google Pollen API**: Forecast response, daily pollen info, plant info, pollen type info, index details, and related support models
+- **Google Weather Alerts API**: Alert response, alert model, alert title, and data source models
 
 ### Utilities and Preferences
 
@@ -72,8 +75,14 @@ The library includes DTOs for the following providers:
   - `DailyForecastPoint`
   - `DoubleRange`
   - `HourlyForecastPoint`
+  - `PollenDailyInformation`
+  - `PollenInformation`
+  - `PollenPlantInformation`
+  - `PollenTypeInformation`
   - `PrecipitationTile`
   - `SunMoonPoint`
+  - `WeatherAlertInformation`
+  - `WeatherAlertItem`
 - Base model:
   - `BaseForecastPoint`
 - Preference enums:
@@ -89,13 +98,14 @@ The library includes DTOs for the following providers:
   - `WeatherProvider.IpGeo.Astronomy.*`
   - `WeatherProvider.SunriseSunset.*`
   - `WeatherProvider.GooglePollen.Forecast.*`
+  - `WeatherProvider.GoogleWeatherAlerts.*`
 
 ## Technology
 
 - **Target Framework**: .NET 10
-- **Current Package Version**: 1.0.3
+- **Current Package Version**: 1.0.5
 - **Dependencies**:
-  - Xcalibur.Extensions.MVVM.V2 (v1.0.4)
+  - Xcalibur.Extensions.MVVM.V2 (v1.0.5)
 - **Features**:
   - Implicit usings enabled
   - Nullable reference types enabled
@@ -120,7 +130,7 @@ Install-Package Xcalibur.Weather.Models
 Or add to your project file:
 
 ```xml
-<PackageReference Include="Xcalibur.Weather.Models" Version="1.0.3" />
+<PackageReference Include="Xcalibur.Weather.Models" Version="1.0.5" />
 ```
 
 ## Use Cases
@@ -149,7 +159,8 @@ Xcalibur.Weather.Models/
 │   │   └── CurrentAirQuality/
 │   ├── OpenStreetMap/             # OpenStreetMap / Nominatim models
 │   ├── SunriseSunset/             # SunriseSunset.io models
-│   └── GooglePollen/              # Google Pollen API forecast models
+│   ├── GooglePollen/              # Google Pollen API forecast models
+│   └── GoogleWeatherAlerts/       # Google Weather Alerts API models
 ├── Helpers/                       # Utility and helper classes
 ├── Preferences.cs                 # Shared preference enums
 └── [Core Models]                  # Forecast and location models
@@ -157,7 +168,25 @@ Xcalibur.Weather.Models/
 
 ## Latest Updates
 
-- Updated package version to **1.0.3**
+### v1.0.5
+- Added **Google Weather Alerts API** provider models:
+  - `WeatherAlertsResponse`
+  - `WeatherAlertModel`
+  - `AlertTitleModel`
+  - `AlertDataSourceModel`
+- Added app-facing alert models:
+  - `WeatherAlertInformation`
+  - `WeatherAlertItem`
+- Bumped `Xcalibur.Extensions.MVVM.V2` dependency to **v1.0.5**
+
+### v1.0.4
+- Added app-facing pollen models:
+  - `PollenInformation`
+  - `PollenDailyInformation`
+  - `PollenTypeInformation`
+  - `PollenPlantInformation`
+
+### v1.0.3
 - Added **Google Pollen API** forecast models:
   - `PollenForecastResponse`
   - `DailyInfoModel`
@@ -167,6 +196,8 @@ Xcalibur.Weather.Models/
   - `PlantInfoModel`
   - `PollenTypeInfoModel`
   - `ColorModel`
+
+### v1.0.2
 - Added **SunriseSunset.io** response models:
   - `SunriseSunsetResponse`
   - `SunriseSunsetResultModel`
