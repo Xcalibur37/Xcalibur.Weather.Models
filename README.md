@@ -4,7 +4,7 @@
 [![NuGet](https://img.shields.io/nuget/v/Xcalibur.Weather.Models.svg)](https://www.nuget.org/packages/Xcalibur.Weather.Models/)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](LICENSE-2.0.txt)
 
-A .NET 10 model library for weather, air quality, geocoding, and astronomy applications. It provides strongly-typed DTOs and domain models used to deserialize provider responses and represent current, hourly, and daily forecast data in a consistent way.
+A .NET 10 model library for weather, air quality, geocoding, astronomy, pollen, and weather alerts applications. It provides strongly-typed DTOs and domain models used to deserialize provider responses and represent current, hourly, and daily forecast data in a consistent way.
 
 **Created by**: Joshua Arzt | **Company**: Xcalibur Systems, LLC.
 
@@ -28,8 +28,8 @@ A .NET 10 model library for weather, air quality, geocoding, and astronomy appli
 **Xcalibur.Weather.Models** is designed to:
 
 - Provide standardized data models for weather applications
-- Support integration with multiple provider APIs including Open-Meteo, Geocodio, OpenStreetMap, IpGeo, SunriseSunset.io, Google Pollen, and Google Weather Alerts
-- Deliver strongly-typed DTOs for current weather, hourly forecasts, daily forecasts, air quality, geocoding, astronomy, pollen, and weather alert data
+- Support integration with multiple provider APIs including Open-Meteo, Geocodio, OpenStreetMap, Astronomy services (IpGeo, SunriseSunset.io), Atmospore (pollen), and weather alert services (Meteoalarm, NWS, GDACS, Environment Canada, BOM, EMSC, DWD)
+- Deliver strongly-typed DTOs for current weather, hourly forecasts, daily forecasts, air quality, geocoding, astronomy, pollen, and multi-source weather alert data
 - Provide reusable forecast point models for application-level weather presentation
 - Offer location and address models for forward geocoding and lookup scenarios
 - Centralize weather-related preference enums and helper methods
@@ -45,8 +45,9 @@ A .NET 10 model library for weather, air quality, geocoding, and astronomy appli
 - **SunMoonPoint**: Sun and moon-related data for astronomy and daylight features
 - **AddressLocationModel**: Application-facing location model for resolved addresses and coordinates
 - **PrecipitationTile** and **DoubleRange**: Supporting models for precipitation display and value ranges
-- **PollenInformation**: App-facing pollen forecast including daily breakdowns, pollen types, and plant-level detail
-- **WeatherAlertInformation**: App-facing weather alert data including severity, certainty, urgency, instructions, and timing
+- **PollenInformation**: App-facing pollen forecast from Atmospore including daily breakdowns, pollen species counts, and location data
+- **WeatherAlertInformation**: App-facing weather alert data from Google Weather Alerts API
+- **CombinedWeatherAlertInformation**: Unified weather alert data from multiple sources (Meteoalarm, NWS, GDACS, Environment Canada, BOM, EMSC, DWD)
 
 ### Provider Models
 
@@ -55,9 +56,16 @@ The library includes DTOs for the following providers:
 - **Open-Meteo**: Current weather, hourly weather, daily weather, weather units, and air quality response models
 - **Geocodio**: Input, response, result, and address component models for geocoding workflows
 - **OpenStreetMap / Nominatim**: Search result and nested address models for location lookup scenarios
-- **IpGeo Astronomy**: Astronomy, location, morning/evening, and sun/moon response models
-- **SunriseSunset.io**: Response and result models for sunrise, sunset, twilight, moonrise, moonset, azimuth, and illumination data
-- **Google Pollen API**: Forecast response, daily pollen info, plant info, pollen type info, index details, and related support models
+- **Astronomy Services**: IpGeo and SunriseSunset.io models for astronomy data, sunrise/sunset, twilight, moonrise, moonset, azimuth, and illumination
+- **Atmospore**: Pollen forecast response models including species-level counts, location data, and metadata
+- **Weather Alert Services**: 
+  - **Meteoalarm**: European severe weather warnings
+  - **NWS (National Weather Service)**: US weather alerts and warnings
+  - **GDACS**: Global Disaster Alert and Coordination System
+  - **Environment Canada**: Canadian weather alerts (CAP format)
+  - **BOM**: Australian Bureau of Meteorology warnings
+  - **EMSC**: European-Mediterranean Seismological Centre earthquake data
+  - **DWD**: German Weather Service (Deutscher Wetterdienst) alerts
 - **Google Weather Alerts API**: Alert response, alert model, alert title, and data source models
 
 ### Utilities and Preferences
@@ -71,16 +79,17 @@ The library includes DTOs for the following providers:
 - Core models:
   - `AddressLocationModel`
   - `AirQualityPoint`
-  - `CurrentForecastPoint`
+  - `DetailedForecastPoint`
   - `DailyForecastPoint`
   - `DoubleRange`
+  - `GridpointExtractedValues`
   - `HourlyForecastPoint`
-  - `PollenDailyInformation`
+  - `PollenDailyEntry`
   - `PollenInformation`
-  - `PollenPlantInformation`
-  - `PollenTypeInformation`
+  - `PollenItem`
   - `PrecipitationTile`
   - `SunMoonPoint`
+  - `CombinedWeatherAlertInformation`
   - `WeatherAlertInformation`
   - `WeatherAlertItem`
 - Base model:
@@ -91,19 +100,25 @@ The library includes DTOs for the following providers:
   - `SoilMoistureUnits`
   - `TimeFormatUnits`
   - `DistanceUnits`
-- Provider model groups:
-  - `WeatherProvider.OpenMeteo.*`
-  - `WeatherProvider.Geocodio.*`
-  - `WeatherProvider.OpenStreetMap.*`
-  - `WeatherProvider.IpGeo.Astronomy.*`
-  - `WeatherProvider.SunriseSunset.*`
-  - `WeatherProvider.GooglePollen.Forecast.*`
-  - `WeatherProvider.GoogleWeatherAlerts.*`
+- Service model groups:
+  - `Services.OpenMeteo.*`
+  - `Services.Geocodio.*`
+  - `Services.OpenStreetMap.*`
+  - `Services.Astronomy.*`
+  - `Services.Atmospore.Response.*`
+  - `Services.GoogleWeatherAlerts.Response.*`
+  - `Services.WeatherAlert.Bom.*`
+  - `Services.WeatherAlert.Dwd.*`
+  - `Services.WeatherAlert.Emsc.*`
+  - `Services.WeatherAlert.EnvironmentCanada.*`
+  - `Services.WeatherAlert.Gdacs.*`
+  - `Services.WeatherAlert.Meteoalarm.*`
+  - `Services.WeatherAlert.Nws.*`
 
 ## Technology
 
 - **Target Framework**: .NET 10
-- **Current Package Version**: 1.0.5
+- **Current Package Version**: 1.0.6
 - **Dependencies**:
   - Xcalibur.Extensions.MVVM.V2 (v1.0.5)
 - **Features**:
@@ -130,7 +145,7 @@ Install-Package Xcalibur.Weather.Models
 Or add to your project file:
 
 ```xml
-<PackageReference Include="Xcalibur.Weather.Models" Version="1.0.5" />
+<PackageReference Include="Xcalibur.Weather.Models" Version="1.0.6" />
 ```
 
 ## Use Cases
@@ -148,25 +163,61 @@ This library is ideal for:
 
 ```
 Xcalibur.Weather.Models/
-├── Base/                          # Base classes for forecast models
-├── WeatherProvider/               # Provider-specific DTOs
-│   ├── Geocodio/                  # Geocodio models
-│   ├── IpGeo/                     # IpGeo astronomy models
-│   ├── OpenMeteo/                 # Open-Meteo models
-│   │   ├── CurrentWeather/
-│   │   ├── HourlyWeather/
-│   │   ├── DailyWeather/
-│   │   └── CurrentAirQuality/
-│   ├── OpenStreetMap/             # OpenStreetMap / Nominatim models
-│   ├── SunriseSunset/             # SunriseSunset.io models
-│   ├── GooglePollen/              # Google Pollen API forecast models
-│   └── GoogleWeatherAlerts/       # Google Weather Alerts API models
+├── Implementation/                # App-facing models
+│   ├── AirQuality/               # Air quality models
+│   ├── Base/                     # Base forecast classes
+│   ├── Geocoding/                # Address and location models
+│   ├── Pollen/                   # Pollen information models
+│   ├── Precipitation/            # Precipitation tile models
+│   ├── SunMoon/                  # Sun and moon data models
+│   ├── WeatherAlerts/            # Alert information models
+│   ├── WeatherForecast/          # Forecast point models
+│   └── Preferences.cs            # Preference enums
+├── Services/                      # Provider-specific DTOs
+│   ├── Astronomy/                # Astronomy response models
+│   ├── Atmospore/                # Atmospore pollen API
+│   ├── Geocodio/                 # Geocodio geocoding
+│   ├── GoogleWeatherAlerts/      # Google Weather Alerts API
+│   ├── OpenMeteo/                # Open-Meteo weather API
+│   ├── OpenStreetMap/            # OpenStreetMap / Nominatim
+│   └── WeatherAlert/             # Multi-source weather alerts
+│       ├── Bom/                  # Australian BOM
+│       ├── Dwd/                  # German DWD
+│       ├── Emsc/                 # EMSC earthquakes
+│       ├── EnvironmentCanada/    # Canadian alerts
+│       ├── Gdacs/                # GDACS global disasters
+│       ├── Meteoalarm/           # European Meteoalarm
+│       └── Nws/                  # US National Weather Service
 ├── Helpers/                       # Utility and helper classes
-├── Preferences.cs                 # Shared preference enums
-└── [Core Models]                  # Forecast and location models
+└── Testing/                       # Testing utilities
 ```
 
 ## Latest Updates
+
+### v1.0.6
+- **Major Refactoring**: Reorganized project structure
+  - Moved app-facing models to `Implementation/` namespace
+  - Moved provider DTOs to `Services/` namespace
+- **Added Atmospore Pollen API**: Replaced Google Pollen with Atmospore
+  - `PollenResponse`
+  - `PollenEntryResponse`
+  - `PollenSpeciesEntryResponse`
+  - `PollenMetaResponse`
+  - `PollenLocationResponse`
+- **Added Multiple Weather Alert Services**:
+  - **Meteoalarm**: European severe weather alerts
+  - **NWS (National Weather Service)**: US alerts with CAP format
+  - **GDACS**: Global disaster coordination system
+  - **Environment Canada**: Canadian weather alerts (CAP/XML)
+  - **BOM**: Australian Bureau of Meteorology warnings
+  - **EMSC**: European-Mediterranean earthquake data
+  - **DWD**: German Weather Service alerts
+- **New Implementation Models**:
+  - `CombinedWeatherAlertInformation`: Unified multi-source alerts
+  - `DetailedForecastPoint`: Enhanced forecast details
+  - `GridpointExtractedValues`: Gridpoint data extraction
+  - Refactored pollen models: `PollenDailyEntry`, `PollenItem`
+- **Removed Legacy Models**: Google Pollen API models removed in favor of Atmospore
 
 ### v1.0.5
 - Added **Google Weather Alerts API** provider models:

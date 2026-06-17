@@ -7,7 +7,7 @@
 
 		<!-- NuGet Package Metadata -->
 		<PackageId>Xcalibur.Weather.Models</PackageId>
-		<Version>1.0.5</Version>
+		<Version>1.0.6</Version>
 		<Authors>Joshua Arzt</Authors>
 		<Company>Xcalibur Systems, LLC.</Company>
 		<Product>Xcalibur.Weather.Models</Product>
@@ -17,7 +17,7 @@
 		<RepositoryType>git</RepositoryType>
 		<PackageIcon>X_logo_512.png</PackageIcon>
 		<PackageTags>weather;forecast;openmeteo;geocoding;air-quality;models;dto;weather-api;meteorology</PackageTags>
-		<PackageReleaseNotes>Added models for Google Weather Alerts API.</PackageReleaseNotes>
+		<PackageReleaseNotes>Added models for Atmospore API, removed legacy API models.</PackageReleaseNotes>
 		<PublishRepositoryUrl>true</PublishRepositoryUrl>
 		<EmbedUntrackedSources>true</EmbedUntrackedSources>
 		<PackageLicenseExpression></PackageLicenseExpression>
@@ -50,10 +50,6 @@
 
 	<ItemGroup>
 		<PackageReference Include="Xcalibur.Extensions.MVVM.V2" Version="1.0.5" />
-	</ItemGroup>
-
-	<ItemGroup>
-	  <Folder Include="WeatherProvider\Nominatim\" />
 	</ItemGroup>
 
 </Project>
