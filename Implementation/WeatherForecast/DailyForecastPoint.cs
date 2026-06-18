@@ -1,3 +1,4 @@
+using System.Text.Json.Serialization;
 using Xcalibur.Weather.Models.Implementation.Base;
 using Xcalibur.Weather.Models.Services.OpenMeteo.DailyWeather;
 
@@ -142,6 +143,17 @@ public class DailyForecastPoint : BaseForecastPoint
 
     #endregion
 
+    #region Constructors
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="DailyForecastPoint"/> class.
+    /// </summary>
+    [JsonConstructor]
+    public DailyForecastPoint()
+    {
+        
+    }
+
     /// <summary>
     /// Initializes a new instance of the <see cref="DailyForecastPoint" /> class.
     /// </summary>
@@ -153,6 +165,10 @@ public class DailyForecastPoint : BaseForecastPoint
         if (data is null) return;
         Map(data, index, nowValue);
     }
+
+    #endregion
+
+    #region Methods
 
     /// <summary>
     /// Maps the specified data.
@@ -203,5 +219,7 @@ public class DailyForecastPoint : BaseForecastPoint
         // Determine if this is the current day.
         IsCurrent = dateValue == nowValue;
     }
+
+    #endregion
 }
 

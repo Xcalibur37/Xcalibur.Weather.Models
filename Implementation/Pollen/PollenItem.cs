@@ -1,3 +1,4 @@
+using System.Text.Json.Serialization;
 using Xcalibur.Weather.Models.Services.Atmospore.Response;
 
 namespace Xcalibur.Weather.Models.Implementation.Pollen
@@ -37,6 +38,15 @@ namespace Xcalibur.Weather.Models.Implementation.Pollen
         #endregion
 
         #region Constructors
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="PollenItem"/> class.
+        /// </summary>
+        [JsonConstructor]
+        public PollenItem()
+        {
+            
+        }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="PollenItem" /> class.

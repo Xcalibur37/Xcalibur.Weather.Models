@@ -1,3 +1,4 @@
+using System.Text.Json.Serialization;
 using Xcalibur.Weather.Models.Services.Astronomy.Response;
 
 namespace Xcalibur.Weather.Models.Implementation.SunMoon
@@ -76,6 +77,15 @@ namespace Xcalibur.Weather.Models.Implementation.SunMoon
         #endregion
 
         #region Constructors
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SunMoonPoint"/> class.
+        /// </summary>
+        [JsonConstructor]   
+        public SunMoonPoint()
+        {
+            
+        }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SunMoonPoint"/> class.

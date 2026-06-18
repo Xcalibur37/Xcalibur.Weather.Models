@@ -24,12 +24,12 @@ public enum ThemeSelections
 public enum TemperatureUnits
 {
     /// <summary>
-    /// The fahrenheit
+    /// The Fahrenheit
     /// </summary>
     [Description("\u00B0F")]
     Fahrenheit,
     /// <summary>
-    /// The celsius
+    /// The Celsius
     /// </summary>
     [Description("\u00B0C")]
     Celsius

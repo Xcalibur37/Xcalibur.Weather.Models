@@ -1,3 +1,5 @@
+using System.Text.Json.Serialization;
+
 namespace Xcalibur.Weather.Models.Implementation.WeatherForecast
 {
     /// <summary>
@@ -6,6 +8,8 @@ namespace Xcalibur.Weather.Models.Implementation.WeatherForecast
     /// </summary>
     public class GridpointExtractedValues
     {
+        #region Properties
+
         /// <summary>
         /// Gets or sets the temperature in Celsius.
         /// </summary>
@@ -50,5 +54,20 @@ namespace Xcalibur.Weather.Models.Implementation.WeatherForecast
         /// Gets or sets the sky cover percentage.
         /// </summary>
         public double? SkyCover { get; set; }
+
+        #endregion
+
+        #region Constructors
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="GridpointExtractedValues"/> class.
+        /// </summary>
+        [JsonConstructor]
+        public GridpointExtractedValues()
+        {
+            
+        }
+        
+        #endregion
     }
 }

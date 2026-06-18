@@ -1,3 +1,4 @@
+using System.Text.Json.Serialization;
 using Xcalibur.Weather.Models.Services.WeatherAlert.Bom;
 using Xcalibur.Weather.Models.Services.WeatherAlert.Dwd;
 using Xcalibur.Weather.Models.Services.WeatherAlert.Emsc;
@@ -52,6 +53,7 @@ namespace Xcalibur.Weather.Models.Implementation.WeatherAlerts
         /// <summary>
         /// Initializes a new instance of the <see cref="CombinedWeatherAlertInformation" /> class.
         /// </summary>
+        [JsonConstructor]
         public CombinedWeatherAlertInformation()
         {
         }

@@ -1,3 +1,4 @@
+using System.Text.Json.Serialization;
 using Xcalibur.Weather.Models.Implementation.Base;
 using Xcalibur.Weather.Models.Services.OpenMeteo.CurrentWeather;
 
@@ -122,6 +123,7 @@ namespace Xcalibur.Weather.Models.Implementation.WeatherForecast
         /// <summary>
         /// Initializes a new instance of the <see cref="DetailedForecastPoint" /> class.
         /// </summary>
+        [JsonConstructor]
         public DetailedForecastPoint()
         {
         }

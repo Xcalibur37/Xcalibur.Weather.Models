@@ -1,4 +1,5 @@
 using System.Globalization;
+using System.Text.Json.Serialization;
 using Xcalibur.Extensions.MVVM.V2.Models;
 using Xcalibur.Weather.Models.Helpers;
 using Xcalibur.Weather.Models.Services.Geocodio.Response;
@@ -92,6 +93,15 @@ namespace Xcalibur.Weather.Models.Implementation.Geocoding
         #endregion
 
         #region Constructors
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="AddressLocationModel"/> class.
+        /// </summary>
+        [JsonConstructor]
+        public AddressLocationModel()
+        {
+            
+        }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="AddressLocationModel"/> class.

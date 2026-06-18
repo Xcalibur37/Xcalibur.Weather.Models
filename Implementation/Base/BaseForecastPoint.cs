@@ -1,4 +1,5 @@
-﻿using Xcalibur.Extensions.MVVM.V2.Models;
+﻿using System.Text.Json.Serialization;
+using Xcalibur.Extensions.MVVM.V2.Models;
 
 namespace Xcalibur.Weather.Models.Implementation.Base
 {
@@ -8,6 +9,8 @@ namespace Xcalibur.Weather.Models.Implementation.Base
     /// <seealso cref="ModelBase" />
     public abstract class BaseForecastPoint : ModelBase
     {
+        #region Properties
+
         /// <summary>
         /// Gets or sets the date time.
         /// </summary>
@@ -47,5 +50,20 @@ namespace Xcalibur.Weather.Models.Implementation.Base
         /// The is current date.
         /// </value>
         public bool IsCurrent { get; set; } = false;
+
+        #endregion
+
+        #region Constructors
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="BaseForecastPoint"/> class.
+        /// </summary>
+        [JsonConstructor]
+        protected BaseForecastPoint()
+        {
+            
+        }
+
+        #endregion
     }
 }

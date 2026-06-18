@@ -1,3 +1,4 @@
+using System.Text.Json.Serialization;
 using Xcalibur.Weather.Models.Implementation.Base;
 using Xcalibur.Weather.Models.Services.OpenMeteo.HourlyWeather;
 
@@ -167,6 +168,15 @@ namespace Xcalibur.Weather.Models.Implementation.WeatherForecast
         #endregion
 
         #region Constructors
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="HourlyForecastPoint"/> class.
+        /// </summary>
+        [JsonConstructor]
+        public HourlyForecastPoint()
+        {
+            
+        }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="DetailedForecastPoint" /> class.

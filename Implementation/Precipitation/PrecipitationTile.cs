@@ -1,4 +1,5 @@
-﻿using Xcalibur.Extensions.MVVM.V2.Models;
+﻿using System.Text.Json.Serialization;
+using Xcalibur.Extensions.MVVM.V2.Models;
 
 namespace Xcalibur.Weather.Models.Implementation.Precipitation
 {
@@ -8,13 +9,15 @@ namespace Xcalibur.Weather.Models.Implementation.Precipitation
     /// <seealso cref="ModelBase" />
     public class PrecipitationTile : ModelBase
     {
+        #region Properties
+
         /// <summary>
         /// Gets or sets the header.
         /// </summary>
         /// <value>
         /// The header.
         /// </value>
-        public string Header { get; private set => NotifyOfChange(value, ref field); }
+        public string Header { get; private set => NotifyOfChange(value, ref field); } = "";
 
         /// <summary>
         /// Gets or sets the value.
@@ -40,6 +43,19 @@ namespace Xcalibur.Weather.Models.Implementation.Precipitation
         /// </value>
         public bool IsVisible { get; private set => NotifyOfChange(value, ref field); }
 
+        #endregion
+
+        #region Constructors
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="PrecipitationTile" /> class.
+        /// </summary>
+        [JsonConstructor]
+        public PrecipitationTile()
+        {
+            
+        }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="PrecipitationTile" /> class.
         /// </summary>
@@ -54,5 +70,7 @@ namespace Xcalibur.Weather.Models.Implementation.Precipitation
             ImagePath = imagePath;
             IsVisible = isVisible;
         }
+
+        #endregion
     }
 }

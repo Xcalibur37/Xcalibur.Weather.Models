@@ -1,3 +1,4 @@
+using System.Text.Json.Serialization;
 using Xcalibur.Weather.Models.Helpers;
 using Xcalibur.Weather.Models.Services.OpenMeteo.CurrentAirQuality;
 
@@ -110,6 +111,15 @@ namespace Xcalibur.Weather.Models.Implementation.AirQuality
         #endregion
 
         #region Constructors
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="AirQualityPoint"/> class.
+        /// </summary>
+        [JsonConstructor]
+        public AirQualityPoint()
+        {
+            
+        }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="AirQualityPoint" /> class.

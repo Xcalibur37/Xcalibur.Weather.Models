@@ -1,3 +1,4 @@
+using System.Text.Json.Serialization;
 using Xcalibur.Weather.Models.Services.GoogleWeatherAlerts.Response;
 
 namespace Xcalibur.Weather.Models.Implementation.WeatherAlerts
@@ -206,6 +207,7 @@ namespace Xcalibur.Weather.Models.Implementation.WeatherAlerts
         /// Initializes a new instance of the <see cref="WeatherAlertItem" /> class.
         /// Default constructor for custom initialization.
         /// </summary>
+        [JsonConstructor]
         public WeatherAlertItem()
         {
         }
