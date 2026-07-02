@@ -1,4 +1,5 @@
 using System.Text.Json.Serialization;
+using Xcalibur.Weather.Models.Services.WeatherAlert.Base;
 
 namespace Xcalibur.Weather.Models.Services.WeatherAlert.Emsc;
 
@@ -6,7 +7,7 @@ namespace Xcalibur.Weather.Models.Services.WeatherAlert.Emsc;
 /// European-Mediterranean Seismological Centre (EMSC) earthquake feed response.
 /// Public feed: https://www.seismicportal.eu/fdsnws/event/1/query
 /// </summary>
-public class EmscResponse
+public class EmscAlertsResponse : BaseAlertsResponse
 {
     /// <summary>
     /// Gets or sets the type.

@@ -51,28 +51,19 @@ namespace Xcalibur.Weather.Models.Implementation.WeatherAlerts
         public string? Description { get; set; }
 
         /// <summary>
-        /// Gets or sets the severity.
+        /// Gets or sets the normalized severity enum value.
         /// </summary>
-        /// <value>
-        /// The severity.
-        /// </value>
-        public string? Severity { get; set; }
+        public AlertSeverity Severity { get; set; }
 
         /// <summary>
-        /// Gets or sets the certainty.
+        /// Gets or sets the normalized certainty enum value.
         /// </summary>
-        /// <value>
-        /// The certainty.
-        /// </value>
-        public string? Certainty { get; set; }
+        public AlertCertainty Certainty { get; set; }
 
         /// <summary>
-        /// Gets or sets the urgency.
+        /// Gets or sets the normalized urgency enum value.
         /// </summary>
-        /// <value>
-        /// The urgency.
-        /// </value>
-        public string? Urgency { get; set; }
+        public AlertUrgency Urgency { get; set; }
 
         /// <summary>
         /// Gets or sets the instructions.
@@ -125,9 +116,9 @@ namespace Xcalibur.Weather.Models.Implementation.WeatherAlerts
         public string? Id { get; set; }
 
         /// <summary>
-        /// Gets or sets the event name.
+        /// Gets or sets the normalized event type enum value.
         /// </summary>
-        public string? Event { get; set; }
+        public AlertEventType Event { get; set; }
 
         /// <summary>
         /// Gets or sets the headline.
@@ -160,9 +151,9 @@ namespace Xcalibur.Weather.Models.Implementation.WeatherAlerts
         public string? MessageType { get; set; }
 
         /// <summary>
-        /// Gets or sets the category.
+        /// Gets or sets the normalized category enum value.
         /// </summary>
-        public string? Category { get; set; }
+        public AlertCategory Category { get; set; }
 
         /// <summary>
         /// Gets or sets the onset time.
@@ -229,13 +220,13 @@ namespace Xcalibur.Weather.Models.Implementation.WeatherAlerts
             Id = data.AlertId;
             Title = data.AlertTitle?.Text;
             EventType = data.EventType;
-            Event = data.EventType;
+            Event = AlertMapper.MapEventType(data.EventType);
             AreaName = data.AreaName;
             AreaDescription = data.AreaName;
             Description = data.Description;
-            Severity = data.Severity;
-            Certainty = data.Certainty;
-            Urgency = data.Urgency;
+            Severity = AlertMapper.MapSeverity(data.Severity);
+            Certainty = AlertMapper.MapCertainty(data.Certainty);
+            Urgency = AlertMapper.MapUrgency(data.Urgency);
             Instructions = data.Instruction ?? [];
             Instruction = string.Join(" ", data.Instruction ?? []);
             Polygon = data.Polygon;

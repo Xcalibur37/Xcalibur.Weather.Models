@@ -1,3 +1,4 @@
+using System.Globalization;
 using System.Text.Json.Serialization;
 using Xcalibur.Weather.Models.Services.WeatherAlert.Bom;
 using Xcalibur.Weather.Models.Services.WeatherAlert.Dwd;
@@ -14,8 +15,6 @@ namespace Xcalibur.Weather.Models.Implementation.WeatherAlerts
     /// </summary>
     public class CombinedWeatherAlertInformation
     {
-        #region Properties
-
         /// <summary>
         /// Gets or sets the latitude.
         /// </summary>
@@ -46,10 +45,6 @@ namespace Xcalibur.Weather.Models.Implementation.WeatherAlerts
         /// </summary>
         public DateTime? LastUpdated { get; set; }
 
-        #endregion
-
-        #region Constructors
-
         /// <summary>
         /// Initializes a new instance of the <see cref="CombinedWeatherAlertInformation" /> class.
         /// </summary>
@@ -67,28 +62,35 @@ namespace Xcalibur.Weather.Models.Implementation.WeatherAlerts
         /// <param name="environmentCanadaData">The Environment Canada data.</param>
         /// <param name="bomData">The BOM Australia data.</param>
         /// <param name="emscData">The EMSC earthquake data.</param>
-        /// <param name="dwdData">The DWD weather warnings data.</param>
+        /// <param name="dwdData">The DWD weather warning data.</param>
         /// <param name="latitude">The latitude.</param>
         /// <param name="longitude">The longitude.</param>
         public CombinedWeatherAlertInformation(
-            MeteoalarmResponse? meteoalarmData,
+            MeteoalarmAlertsResponse? meteoalarmData,
             NwsAlertsResponse? nwsData,
-            GdacsResponse? gdacsData,
-            EnvironmentCanadaResponse? environmentCanadaData,
+            GdacsAlertsResponse? gdacsData,
+            EnvironmentCanadaAlertsResponse? environmentCanadaData,
             BomAlertsResponse? bomData,
-            EmscResponse? emscData,
+            EmscAlertsResponse? emscData,
             DwdAlertsResponse? dwdData,
             string? latitude,
             string? longitude)
         {
             LastUpdated = DateTime.UtcNow;
 
-            if (!string.IsNullOrEmpty(latitude) && double.TryParse(latitude, out var lat))
+            // Parse latitude if provided
+            if (!string.IsNullOrEmpty(latitude) && double.TryParse(latitude, NumberStyles.Float, CultureInfo.InvariantCulture, out var lat))
+            {
                 Latitude = lat;
+            }
 
-            if (!string.IsNullOrEmpty(longitude) && double.TryParse(longitude, out var lon))
+            // Parse longitude if provided
+            if (!string.IsNullOrEmpty(longitude) && double.TryParse(longitude, NumberStyles.Float, CultureInfo.InvariantCulture, out var lon))
+            {
                 Longitude = lon;
+            }
 
+            // Map data from each source to the combined alert items
             MapMeteoalarm(meteoalarmData);
             MapNws(nwsData);
             MapGdacs(gdacsData);
@@ -98,42 +100,40 @@ namespace Xcalibur.Weather.Models.Implementation.WeatherAlerts
             MapDwd(dwdData);
         }
 
-        #endregion
-
-        #region Methods
-
         /// <summary>
         /// Maps Meteoalarm data to combined alert items.
         /// </summary>
         /// <param name="data">The Meteoalarm response data.</param>
-        private void MapMeteoalarm(MeteoalarmResponse? data)
+        private void MapMeteoalarm(MeteoalarmAlertsResponse? data)
         {
-            if (data?.Alerts is null || data.Alerts.Count == 0) return;
+            if (data?.Alerts is not { Count: > 0 }) return;
 
+            // Add Meteoalarm as a data source
             DataSources.Add("Meteoalarm");
             RegionCode ??= data.Country;
 
+            // Map each Meteoalarm alert to a WeatherAlertItem
             foreach (var alert in data.Alerts)
             {
-                var item = new WeatherAlertItem
+                Alerts.Add(new WeatherAlertItem
                 {
                     Id = alert.Id,
                     Source = "Meteoalarm",
-                    Event = alert.Event,
+                    Event = AlertMapper.MapEventType(alert.Event),
                     Headline = alert.Headline,
                     Description = alert.Description,
                     Instruction = alert.Instruction,
-                    Severity = alert.Severity ?? MapAwarenessLevelToSeverity(alert.AwarenessLevel),
-                    Certainty = alert.Certainty,
-                    Urgency = alert.Urgency,
+                    Severity = string.IsNullOrEmpty(alert.Severity) 
+                        ? MapAwarenessLevelToSeverity(alert.AwarenessLevel) 
+                        : AlertMapper.MapSeverity(alert.Severity),
+                    Certainty = AlertMapper.MapCertainty(alert.Certainty),
+                    Urgency = AlertMapper.MapUrgency(alert.Urgency),
                     AreaDescription = alert.Area,
                     SenderName = alert.SenderName,
                     Onset = ParseDateTime(alert.Onset),
                     Expires = ParseDateTime(alert.Expires),
                     Effective = ParseDateTime(alert.Effective)
-                };
-
-                Alerts.Add(item);
+                });
             }
         }
 
@@ -143,39 +143,37 @@ namespace Xcalibur.Weather.Models.Implementation.WeatherAlerts
         /// <param name="data">The NWS response data.</param>
         private void MapNws(NwsAlertsResponse? data)
         {
-            if (data?.Features is null || data.Features.Count == 0) return;
+            if (data?.Features is not { Count: > 0 }) return;
 
+            // Add NWS as a data source
             DataSources.Add("NWS");
 
-            foreach (var feature in data.Features)
+            // Map each NWS alert to a WeatherAlertItem
+            foreach (var props in data.Features.Select(x => x.Properties).OfType<NwsAlertPropertiesResponse>())
             {
-                var props = feature.Properties;
-                if (props is null) continue;
-
-                var item = new WeatherAlertItem
+                // Map the NWS alert properties to a WeatherAlertItem
+                Alerts.Add(new WeatherAlertItem
                 {
                     Id = props.Id,
                     Source = "NWS",
-                    Event = props.Event,
+                    Event = AlertMapper.MapEventType(props.Event),
                     Headline = props.Headline,
                     Description = props.Description,
                     Instruction = props.Instruction,
-                    Severity = props.Severity,
-                    Certainty = props.Certainty,
-                    Urgency = props.Urgency,
+                    Severity = AlertMapper.MapSeverity(props.Severity),
+                    Certainty = AlertMapper.MapCertainty(props.Certainty),
+                    Urgency = AlertMapper.MapUrgency(props.Urgency),
                     AreaDescription = props.AreaDesc,
                     SenderName = props.SenderName,
                     Status = props.Status,
                     MessageType = props.MessageType,
-                    Category = props.Category,
+                    Category = AlertMapper.MapCategory(props.Category),
                     Onset = ParseDateTime(props.Onset),
                     Expires = ParseDateTime(props.Expires),
                     Effective = ParseDateTime(props.Effective),
                     Ends = ParseDateTime(props.Ends),
                     Sent = ParseDateTime(props.Sent)
-                };
-
-                Alerts.Add(item);
+                });
             }
         }
 
@@ -183,32 +181,30 @@ namespace Xcalibur.Weather.Models.Implementation.WeatherAlerts
         /// Maps GDACS data to combined alert items.
         /// </summary>
         /// <param name="data">The GDACS response data.</param>
-        private void MapGdacs(GdacsResponse? data)
+        private void MapGdacs(GdacsAlertsResponse? data)
         {
-            if (data?.Features is null || data.Features.Count == 0) return;
+            if (data?.Features is not { Count: > 0 }) return;
 
+            // Add GDACS as a data source
             DataSources.Add("GDACS");
 
-            foreach (var feature in data.Features)
+            // Map each GDACS feature to a WeatherAlertItem
+            foreach (var props in data.Features.Select(x => x.Properties).OfType<GdacsEventResponse>())
             {
-                var props = feature.Properties;
-                if (props is null) continue;
-
-                var item = new WeatherAlertItem
+                // Map the GDACS feature properties to a WeatherAlertItem
+                Alerts.Add(new WeatherAlertItem
                 {
                     Id = props.EventId,
                     Source = "GDACS",
-                    Event = props.EventType,
+                    Event = AlertMapper.MapEventType(props.EventType),
                     Headline = props.EventName,
                     Description = props.Description,
                     Severity = MapGdacsAlertLevelToSeverity(props.AlertLevel),
                     AreaDescription = props.Country,
-                    Category = props.EventType,
+                    Category = AlertMapper.MapCategory(props.EventType),
                     Onset = ParseDateTime(props.FromDate),
                     Ends = ParseDateTime(props.ToDate)
-                };
-
-                Alerts.Add(item);
+                });
             }
         }
 
@@ -216,39 +212,40 @@ namespace Xcalibur.Weather.Models.Implementation.WeatherAlerts
         /// Maps Environment Canada data to combined alert items.
         /// </summary>
         /// <param name="data">The Environment Canada response data.</param>
-        private void MapEnvironmentCanada(EnvironmentCanadaResponse? data)
+        private void MapEnvironmentCanada(EnvironmentCanadaAlertsResponse? data)
         {
-            if (data?.Entries is null || data.Entries.Count == 0) return;
+            if (data?.Entries is not { Count: > 0 }) return;
 
+            // Add Environment Canada as a data source
             DataSources.Add("Environment Canada");
 
+            // Map each Environment Canada entry to a WeatherAlertItem
             foreach (var entry in data.Entries)
             {
                 var capInfo = entry.CapAlert?.Info;
                 if (capInfo is null) continue;
 
-                var item = new WeatherAlertItem
+                // Map the Environment Canada CAP info to a WeatherAlertItem
+                Alerts.Add(new WeatherAlertItem
                 {
                     Id = entry.CapAlert?.Identifier ?? entry.Id,
                     Source = "Environment Canada",
-                    Event = capInfo.Event,
+                    Event = AlertMapper.MapEventType(capInfo.Event),
                     Headline = capInfo.Headline ?? entry.Title,
                     Description = capInfo.Description ?? entry.Summary,
                     Instruction = capInfo.Instruction,
-                    Severity = capInfo.Severity,
-                    Certainty = capInfo.Certainty,
-                    Urgency = capInfo.Urgency,
+                    Severity = AlertMapper.MapSeverity(capInfo.Severity),
+                    Certainty = AlertMapper.MapCertainty(capInfo.Certainty),
+                    Urgency = AlertMapper.MapUrgency(capInfo.Urgency),
                     AreaDescription = capInfo.Area?.AreaDesc,
                     SenderName = capInfo.SenderName,
-                    Category = capInfo.Category,
+                    Category = AlertMapper.MapCategory(capInfo.Category),
                     Effective = ParseDateTime(capInfo.Effective),
                     Expires = ParseDateTime(capInfo.Expires),
                     Sent = ParseDateTime(entry.CapAlert?.Sent),
                     Status = entry.CapAlert?.Status,
                     MessageType = entry.CapAlert?.MsgType
-                };
-
-                Alerts.Add(item);
+                });
             }
         }
 
@@ -258,28 +255,29 @@ namespace Xcalibur.Weather.Models.Implementation.WeatherAlerts
         /// <param name="data">The BOM response data.</param>
         private void MapBom(BomAlertsResponse? data)
         {
-            if (data?.Warnings is null || data.Warnings.Count == 0) return;
+            if (data?.Warnings is not { Count: > 0 }) return;
 
+            // Add BOM Australia as a data source
             DataSources.Add("BOM Australia");
 
+            // Map each BOM warning to a WeatherAlertItem
             foreach (var warning in data.Warnings)
             {
-                var item = new WeatherAlertItem
+                // Map the BOM warning properties to a WeatherAlertItem
+                Alerts.Add(new WeatherAlertItem
                 {
                     Id = warning.Id,
                     Source = "BOM Australia",
-                    Event = warning.Type,
+                    Event = AlertMapper.MapEventType(warning.Type),
                     Headline = warning.Title ?? warning.ShortTitle,
                     Description = warning.Description,
                     Severity = MapBomWarningLevelToSeverity(warning.WarningLevel),
                     AreaDescription = warning.Areas.Count > 0 ? string.Join(", ", warning.Areas) : warning.State,
-                    Category = warning.Type,
+                    Category = AlertMapper.MapCategory(warning.Type),
                     Status = warning.Phase,
                     Effective = ParseDateTime(warning.IssueTime),
                     Expires = ParseDateTime(warning.ExpiryTime)
-                };
-
-                Alerts.Add(item);
+                });
             }
         }
 
@@ -288,90 +286,80 @@ namespace Xcalibur.Weather.Models.Implementation.WeatherAlerts
         /// </summary>
         /// <param name="warningLevel">The BOM warning level.</param>
         /// <returns>Severity string.</returns>
-        private static string MapBomWarningLevelToSeverity(string? warningLevel)
-        {
-            if (string.IsNullOrEmpty(warningLevel)) return "Unknown";
-
-            // BOM uses terms like "Severe", "Extreme", "Moderate"
-            return warningLevel.ToUpperInvariant() switch
-            {
-                var level when level.Contains("EXTREME") => "Extreme",
-                var level when level.Contains("SEVERE") => "Severe",
-                var level when level.Contains("MODERATE") => "Moderate",
-                var level when level.Contains("MINOR") => "Minor",
-                _ => "Moderate"
-            };
-        }
+        private static AlertSeverity MapBomWarningLevelToSeverity(string? warningLevel) =>
+            string.IsNullOrEmpty(warningLevel)
+                ? AlertSeverity.Unknown
+                : warningLevel.ToUpperInvariant() switch
+                {
+                    var level when level.Contains("EXTREME") => AlertSeverity.Extreme,
+                    var level when level.Contains("SEVERE") => AlertSeverity.Severe,
+                    var level when level.Contains("MODERATE") => AlertSeverity.Moderate,
+                    var level when level.Contains("MINOR") => AlertSeverity.Minor,
+                    _ => AlertSeverity.Moderate
+                };
 
         /// <summary>
         /// Maps GDACS alert level to severity string.
         /// </summary>
         /// <param name="alertLevel">The GDACS alert level (Green, Orange, Red).</param>
         /// <returns>Severity string.</returns>
-        private static string MapGdacsAlertLevelToSeverity(string? alertLevel)
-        {
-            return alertLevel?.ToUpperInvariant() switch
+        private static AlertSeverity MapGdacsAlertLevelToSeverity(string? alertLevel) =>
+            alertLevel?.ToUpperInvariant() switch
             {
-                "GREEN" => "Minor",
-                "ORANGE" => "Moderate",
-                "RED" => "Severe",
-                _ => "Unknown"
+                "GREEN" => AlertSeverity.Minor,
+                "ORANGE" => AlertSeverity.Moderate,
+                "RED" => AlertSeverity.Severe,
+                _ => AlertSeverity.Unknown
             };
-        }
 
         /// <summary>
         /// Maps Meteoalarm awareness level to severity string.
         /// </summary>
         /// <param name="awarenessLevel">The awareness level (1=Green, 2=Yellow, 3=Orange, 4=Red).</param>
         /// <returns>Severity string.</returns>
-        private static string MapAwarenessLevelToSeverity(int? awarenessLevel)
-        {
-            return awarenessLevel switch
+        private static AlertSeverity MapAwarenessLevelToSeverity(int? awarenessLevel) =>
+            awarenessLevel switch
             {
-                1 => "Minor",
-                2 => "Moderate",
-                3 => "Severe",
-                4 => "Extreme",
-                _ => "Unknown"
+                1 => AlertSeverity.Minor,
+                2 => AlertSeverity.Moderate,
+                3 => AlertSeverity.Severe,
+                4 => AlertSeverity.Extreme,
+                _ => AlertSeverity.Unknown
             };
-        }
 
         /// <summary>
         /// Maps EMSC earthquake data to combined alert items.
         /// </summary>
         /// <param name="data">The EMSC response data.</param>
-        private void MapEmsc(EmscResponse? data)
+        private void MapEmsc(EmscAlertsResponse? data)
         {
-            if (data?.Features is null || data.Features.Count == 0) return;
+            if (data?.Features is not { Count: > 0 }) return;
 
+            // Add EMSC as a data source
             DataSources.Add("EMSC");
 
+            // Map each EMSC feature to a WeatherAlertItem
             foreach (var feature in data.Features)
             {
                 if (feature.Properties is null) continue;
-
                 var props = feature.Properties;
-                var coords = feature.Geometry?.Coordinates;
 
-                var item = new WeatherAlertItem
+                // Map the EMSC earthquake properties to a WeatherAlertItem
+                Alerts.Add(new WeatherAlertItem
                 {
                     Source = "EMSC",
                     Id = feature.Id ?? props.UniqueId,
-                    Event = "earthquake",
+                    Event = AlertEventType.Earthquake,
                     Headline = $"Magnitude {props.Magnitude:F1} earthquake - {props.Region}",
                     Description = $"Magnitude {props.Magnitude:F1} {props.MagnitudeType} earthquake at depth {props.Depth:F1} km in {props.Region}.",
                     Severity = MapMagnitudeToSeverity(props.Magnitude),
-                    Urgency = "Past",
-                    Certainty = "Observed",
-                    Category = "Geo",
+                    Urgency = AlertUrgency.Past,
+                    Certainty = AlertCertainty.Observed,
+                    Category = AlertCategory.Geo,
                     AreaDescription = props.Region,
                     Onset = ParseDateTime(props.Time),
                     Expires = null
-                };
-
-                // Note: Coordinates available in feature.Geometry.Coordinates but WeatherAlertItem doesn't store lat/lon
-
-                Alerts.Add(item);
+                });
             }
         }
 
@@ -381,32 +369,30 @@ namespace Xcalibur.Weather.Models.Implementation.WeatherAlerts
         /// <param name="data">The DWD response data.</param>
         private void MapDwd(DwdAlertsResponse? data)
         {
-            if (data?.Warnings is null || data.Warnings.Count == 0) return;
+            if (data?.Warnings is not { Count: > 0 }) return;
 
+            // Add DWD as a data source
             DataSources.Add("DWD");
 
-            foreach (var regionWarnings in data.Warnings.Values)
+            // Map each DWD warning to a WeatherAlertItem
+            foreach (var warning in data.Warnings.Values.SelectMany(x => x.Values))
             {
-                foreach (var warning in regionWarnings.Values)
+                // Map the DWD warning properties to a WeatherAlertItem
+                Alerts.Add(new WeatherAlertItem
                 {
-                    var item = new WeatherAlertItem
-                    {
-                        Source = "DWD",
-                        Event = warning.Event,
-                        Headline = warning.Headline,
-                        Description = warning.Description,
-                        Instruction = warning.Instruction,
-                        Severity = MapDwdLevelToSeverity(warning.Level),
-                        Urgency = "Expected",
-                        Certainty = "Likely",
-                        Category = "Met",
-                        AreaDescription = warning.RegionName,
-                        Onset = warning.Start.HasValue ? DateTimeOffset.FromUnixTimeMilliseconds(warning.Start.Value).DateTime : null,
-                        Expires = warning.End.HasValue ? DateTimeOffset.FromUnixTimeMilliseconds(warning.End.Value).DateTime : null
-                    };
-
-                    Alerts.Add(item);
-                }
+                    Source = "DWD",
+                    Event = AlertMapper.MapEventType(warning.Event),
+                    Headline = warning.Headline,
+                    Description = warning.Description,
+                    Instruction = warning.Instruction,
+                    Severity = MapDwdLevelToSeverity(warning.Level),
+                    Urgency = AlertUrgency.Expected,
+                    Certainty = AlertCertainty.Likely,
+                    Category = AlertCategory.Met,
+                    AreaDescription = warning.RegionName,
+                    Onset = warning.Start.HasValue ? DateTimeOffset.FromUnixTimeMilliseconds(warning.Start.Value).DateTime : null,
+                    Expires = warning.End.HasValue ? DateTimeOffset.FromUnixTimeMilliseconds(warning.End.Value).DateTime : null
+                });
             }
         }
 
@@ -415,48 +401,40 @@ namespace Xcalibur.Weather.Models.Implementation.WeatherAlerts
         /// </summary>
         /// <param name="magnitude">The earthquake magnitude.</param>
         /// <returns>Severity string.</returns>
-        private static string MapMagnitudeToSeverity(double? magnitude)
-        {
-            if (!magnitude.HasValue) return "Unknown";
-
-            return magnitude.Value switch
-            {
-                < 4.0 => "Minor",
-                < 5.0 => "Moderate",
-                < 6.0 => "Severe",
-                _ => "Extreme"
-            };
-        }
+        private static AlertSeverity MapMagnitudeToSeverity(double? magnitude) =>
+            !magnitude.HasValue
+                ? AlertSeverity.Unknown
+                : magnitude.Value switch
+                {
+                    < 4.0 => AlertSeverity.Minor,
+                    < 5.0 => AlertSeverity.Moderate,
+                    < 6.0 => AlertSeverity.Severe,
+                    _ => AlertSeverity.Extreme
+                };
 
         /// <summary>
         /// Maps DWD warning level to severity string.
         /// </summary>
         /// <param name="level">The DWD warning level (1-4).</param>
         /// <returns>Severity string.</returns>
-        private static string MapDwdLevelToSeverity(int? level)
-        {
-            return level switch
+        private static AlertSeverity MapDwdLevelToSeverity(int? level) =>
+            level switch
             {
-                1 => "Minor",
-                2 => "Moderate",
-                3 => "Severe",
-                4 => "Extreme",
-                _ => "Unknown"
+                1 => AlertSeverity.Minor,
+                2 => AlertSeverity.Moderate,
+                3 => AlertSeverity.Severe,
+                4 => AlertSeverity.Extreme,
+                _ => AlertSeverity.Unknown
             };
-        }
 
         /// <summary>
         /// Parses a date-time string safely.
         /// </summary>
         /// <param name="dateTimeString">The date-time string.</param>
         /// <returns>Parsed DateTime or null.</returns>
-        private static DateTime? ParseDateTime(string? dateTimeString)
-        {
-            if (string.IsNullOrWhiteSpace(dateTimeString)) return null;
-
-            return DateTime.TryParse(dateTimeString, out var result) ? result : null;
-        }
-
-        #endregion
+        private static DateTime? ParseDateTime(string? dateTimeString) =>
+            !string.IsNullOrWhiteSpace(dateTimeString) && DateTime.TryParse(dateTimeString, CultureInfo.InvariantCulture, DateTimeStyles.None, out var result)
+                ? result
+                : null;
     }
 }

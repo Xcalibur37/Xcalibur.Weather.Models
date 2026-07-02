@@ -1,4 +1,5 @@
 using System.Xml.Serialization;
+using Xcalibur.Weather.Models.Services.WeatherAlert.Base;
 
 namespace Xcalibur.Weather.Models.Services.WeatherAlert.EnvironmentCanada
 {
@@ -6,7 +7,7 @@ namespace Xcalibur.Weather.Models.Services.WeatherAlert.EnvironmentCanada
     /// Represents the root feed response from Environment Canada weather alerts.
     /// </summary>
     [XmlRoot("feed", Namespace = "http://www.w3.org/2005/Atom")]
-    public class EnvironmentCanadaResponse
+    public class EnvironmentCanadaAlertsResponse : BaseAlertsResponse
     {
         /// <summary>
         /// Gets or sets the feed title.

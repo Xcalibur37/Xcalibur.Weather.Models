@@ -1,11 +1,12 @@
 using System.Text.Json.Serialization;
+using Xcalibur.Weather.Models.Services.WeatherAlert.Base;
 
 namespace Xcalibur.Weather.Models.Services.WeatherAlert.Meteoalarm
 {
     /// <summary>
     /// Top-level response from the Meteoalarm API.
     /// </summary>
-    public class MeteoalarmResponse
+    public class MeteoalarmAlertsResponse : BaseAlertsResponse
     {
         /// <summary>
         /// Gets or sets the list of weather alerts.

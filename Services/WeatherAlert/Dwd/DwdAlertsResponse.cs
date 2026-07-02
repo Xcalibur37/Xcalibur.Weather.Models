@@ -1,4 +1,5 @@
 using System.Text.Json.Serialization;
+using Xcalibur.Weather.Models.Services.WeatherAlert.Base;
 
 namespace Xcalibur.Weather.Models.Services.WeatherAlert.Dwd;
 
@@ -6,7 +7,7 @@ namespace Xcalibur.Weather.Models.Services.WeatherAlert.Dwd;
 /// DWD (Deutscher Wetterdienst) warnings response.
 /// Public feed: https://www.dwd.de/DWD/warnungen/warnapp/json/warnings.json
 /// </summary>
-public class DwdAlertsResponse
+public class DwdAlertsResponse : BaseAlertsResponse
 {
     /// <summary>
     /// Gets or sets the time.

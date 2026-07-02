@@ -1,11 +1,12 @@
 using System.Text.Json.Serialization;
+using Xcalibur.Weather.Models.Services.WeatherAlert.Base;
 
 namespace Xcalibur.Weather.Models.Services.WeatherAlert.Nws
 {
     /// <summary>
     /// Top-level response from the National Weather Service alerts API.
     /// </summary>
-    public class NwsAlertsResponse
+    public class NwsAlertsResponse : BaseAlertsResponse
     {
         /// <summary>
         /// Gets or sets the context.
