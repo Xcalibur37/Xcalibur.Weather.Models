@@ -5,8 +5,142 @@ namespace Xcalibur.Weather.Models.Implementation.WeatherAlerts;
 /// <summary>
 /// Helper class for mapping weather alert string values to normalized enums.
 /// </summary>
-public static class AlertMapper
+public static partial class AlertMapper
 {
+    #region Compiled Regex Patterns
+
+    // Event Type Patterns
+    [GeneratedRegex(@"\btornado\b", RegexOptions.IgnoreCase | RegexOptions.Compiled)]
+    private static partial Regex TornadoPattern();
+
+    [GeneratedRegex(@"\bhurricane\b", RegexOptions.IgnoreCase | RegexOptions.Compiled)]
+    private static partial Regex HurricanePattern();
+
+    [GeneratedRegex(@"\btyphoon\b", RegexOptions.IgnoreCase | RegexOptions.Compiled)]
+    private static partial Regex TyphoonPattern();
+
+    [GeneratedRegex(@"\btropical\s*storm\b", RegexOptions.IgnoreCase | RegexOptions.Compiled)]
+    private static partial Regex TropicalStormPattern();
+
+    [GeneratedRegex(@"\bsevere\s*thunderstorm\b", RegexOptions.IgnoreCase | RegexOptions.Compiled)]
+    private static partial Regex SevereThunderstormPattern();
+
+    [GeneratedRegex(@"\bthunderstorm\b", RegexOptions.IgnoreCase | RegexOptions.Compiled)]
+    private static partial Regex ThunderstormPattern();
+
+    [GeneratedRegex(@"\bhail\b", RegexOptions.IgnoreCase | RegexOptions.Compiled)]
+    private static partial Regex HailPattern();
+
+    [GeneratedRegex(@"\b(high|strong|damaging|extreme)\s*wind\b", RegexOptions.IgnoreCase | RegexOptions.Compiled)]
+    private static partial Regex HighWindPattern();
+
+    [GeneratedRegex(@"\bgale\b", RegexOptions.IgnoreCase | RegexOptions.Compiled)]
+    private static partial Regex GalePattern();
+
+    [GeneratedRegex(@"\bblizzard\b", RegexOptions.IgnoreCase | RegexOptions.Compiled)]
+    private static partial Regex BlizzardPattern();
+
+    [GeneratedRegex(@"\bwinter\s*storm\b", RegexOptions.IgnoreCase | RegexOptions.Compiled)]
+    private static partial Regex WinterStormPattern();
+
+    [GeneratedRegex(@"\b(heavy\s*)?snow(fall)?\b", RegexOptions.IgnoreCase | RegexOptions.Compiled)]
+    private static partial Regex SnowPattern();
+
+    [GeneratedRegex(@"\bavalanche\b", RegexOptions.IgnoreCase | RegexOptions.Compiled)]
+    private static partial Regex AvalanchePattern();
+
+    [GeneratedRegex(@"\b(ice|freezing|icing)\b", RegexOptions.IgnoreCase | RegexOptions.Compiled)]
+    private static partial Regex IcePattern();
+
+    [GeneratedRegex(@"\b(frost|freeze)\b", RegexOptions.IgnoreCase | RegexOptions.Compiled)]
+    private static partial Regex FrostPattern();
+
+    [GeneratedRegex(@"\b(excessive|extreme)\s*heat\b", RegexOptions.IgnoreCase | RegexOptions.Compiled)]
+    private static partial Regex ExcessiveHeatPattern();
+
+    [GeneratedRegex(@"\bheat(\s*wave)?\b", RegexOptions.IgnoreCase | RegexOptions.Compiled)]
+    private static partial Regex HeatPattern();
+
+    [GeneratedRegex(@"\b(extreme|excessive)\s*cold\b", RegexOptions.IgnoreCase | RegexOptions.Compiled)]
+    private static partial Regex ExtremeColdPattern();
+
+    [GeneratedRegex(@"\bflash\s*flood\b", RegexOptions.IgnoreCase | RegexOptions.Compiled)]
+    private static partial Regex FlashFloodPattern();
+
+    [GeneratedRegex(@"\bcoastal\s*flood\b", RegexOptions.IgnoreCase | RegexOptions.Compiled)]
+    private static partial Regex CoastalFloodPattern();
+
+    [GeneratedRegex(@"\bflood\b", RegexOptions.IgnoreCase | RegexOptions.Compiled)]
+    private static partial Regex FloodPattern();
+
+    [GeneratedRegex(@"\btsunami\b", RegexOptions.IgnoreCase | RegexOptions.Compiled)]
+    private static partial Regex TsunamiPattern();
+
+    [GeneratedRegex(@"\bstorm\s*surge\b", RegexOptions.IgnoreCase | RegexOptions.Compiled)]
+    private static partial Regex StormSurgePattern();
+
+    [GeneratedRegex(@"\bhigh\s*water\b", RegexOptions.IgnoreCase | RegexOptions.Compiled)]
+    private static partial Regex HighWaterPattern();
+
+    [GeneratedRegex(@"\b(heavy|torrential)\s*rain\b", RegexOptions.IgnoreCase | RegexOptions.Compiled)]
+    private static partial Regex RainPattern();
+
+    [GeneratedRegex(@"\bhigh\s*surf\b", RegexOptions.IgnoreCase | RegexOptions.Compiled)]
+    private static partial Regex HighSurfPattern();
+
+    [GeneratedRegex(@"\brip\s*current\b", RegexOptions.IgnoreCase | RegexOptions.Compiled)]
+    private static partial Regex RipCurrentPattern();
+
+    [GeneratedRegex(@"\bsmall\s*craft\b", RegexOptions.IgnoreCase | RegexOptions.Compiled)]
+    private static partial Regex SmallCraftPattern();
+
+    [GeneratedRegex(@"\bred\s*flag\b", RegexOptions.IgnoreCase | RegexOptions.Compiled)]
+    private static partial Regex RedFlagPattern();
+
+    [GeneratedRegex(@"\b(wild)?fire\b", RegexOptions.IgnoreCase | RegexOptions.Compiled)]
+    private static partial Regex FirePattern();
+
+    [GeneratedRegex(@"\bair\s*quality\b", RegexOptions.IgnoreCase | RegexOptions.Compiled)]
+    private static partial Regex AirQualityPattern();
+
+    [GeneratedRegex(@"\bsmoke\b", RegexOptions.IgnoreCase | RegexOptions.Compiled)]
+    private static partial Regex SmokePattern();
+
+    [GeneratedRegex(@"\bdust\s*storm\b", RegexOptions.IgnoreCase | RegexOptions.Compiled)]
+    private static partial Regex DustStormPattern();
+
+    [GeneratedRegex(@"\bfog\b", RegexOptions.IgnoreCase | RegexOptions.Compiled)]
+    private static partial Regex FogPattern();
+
+    [GeneratedRegex(@"\bearthquake\b", RegexOptions.IgnoreCase | RegexOptions.Compiled)]
+    private static partial Regex EarthquakePattern();
+
+    [GeneratedRegex(@"\bvolcan(o|ic)\b", RegexOptions.IgnoreCase | RegexOptions.Compiled)]
+    private static partial Regex VolcanoPattern();
+
+    [GeneratedRegex(@"\b(land|mud)slide\b", RegexOptions.IgnoreCase | RegexOptions.Compiled)]
+    private static partial Regex LandslidePattern();
+
+    [GeneratedRegex(@"\bspecial\s*weather\s*statement\b", RegexOptions.IgnoreCase | RegexOptions.Compiled)]
+    private static partial Regex SpecialWeatherStatementPattern();
+
+    [GeneratedRegex(@"\bcivil\s*emergency\b", RegexOptions.IgnoreCase | RegexOptions.Compiled)]
+    private static partial Regex CivilEmergencyPattern();
+
+    [GeneratedRegex(@"\bhazardous\s*materials\b", RegexOptions.IgnoreCase | RegexOptions.Compiled)]
+    private static partial Regex HazardousMaterialsPattern();
+
+    [GeneratedRegex(@"\bnuclear\s*power\s*plant\b", RegexOptions.IgnoreCase | RegexOptions.Compiled)]
+    private static partial Regex NuclearPowerPlantPattern();
+
+    // Normalization Patterns
+    [GeneratedRegex(@"\s+", RegexOptions.Compiled)]
+    private static partial Regex WhitespacePattern();
+
+    [GeneratedRegex(@"\b(warning|watch|advisory|statement|alert)\b", RegexOptions.IgnoreCase | RegexOptions.Compiled)]
+    private static partial Regex CommonSuffixPattern();
+
+    #endregion
     #region Urgency Mapping
 
     /// <summary>
@@ -19,12 +153,13 @@ public static class AlertMapper
         if (string.IsNullOrWhiteSpace(urgency))
             return AlertUrgency.Unknown;
 
+        // Normalize the urgency string for consistent matching
         return urgency.Trim().ToUpperInvariant() switch
         {
-            var u when u.Contains("IMMEDIATE") => AlertUrgency.Immediate,
-            var u when u.Contains("EXPECTED") => AlertUrgency.Expected,
-            var u when u.Contains("FUTURE") => AlertUrgency.Future,
-            var u when u.Contains("PAST") => AlertUrgency.Past,
+            "IMMEDIATE" => AlertUrgency.Immediate,
+            "EXPECTED" => AlertUrgency.Expected,
+            "FUTURE" => AlertUrgency.Future,
+            "PAST" => AlertUrgency.Past,
             _ => AlertUrgency.Unknown
         };
     }
@@ -43,6 +178,7 @@ public static class AlertMapper
         if (string.IsNullOrWhiteSpace(certainty))
             return AlertCertainty.Unknown;
 
+        // Normalize the certainty string for consistent matching
         return certainty.Trim().ToUpperInvariant() switch
         {
             "OBSERVED" => AlertCertainty.Observed,
@@ -67,6 +203,7 @@ public static class AlertMapper
         if (string.IsNullOrWhiteSpace(category))
             return AlertCategory.Unknown;
 
+        // Normalize the category string for consistent matching
         return category.Trim().ToUpperInvariant() switch
         {
             "MET" => AlertCategory.Met,
@@ -103,16 +240,13 @@ public static class AlertMapper
         if (string.IsNullOrWhiteSpace(severity))
             return AlertSeverity.Unknown;
 
+        // Normalize the severity string for consistent matching
         return severity.Trim().ToUpperInvariant() switch
         {
             "EXTREME" => AlertSeverity.Extreme,
             "SEVERE" => AlertSeverity.Severe,
             "MODERATE" => AlertSeverity.Moderate,
             "MINOR" => AlertSeverity.Minor,
-            var s when s.Contains("EXTREME") => AlertSeverity.Extreme,
-            var s when s.Contains("SEVERE") => AlertSeverity.Severe,
-            var s when s.Contains("MODERATE") => AlertSeverity.Moderate,
-            var s when s.Contains("MINOR") => AlertSeverity.Minor,
             _ => AlertSeverity.Unknown
         };
     }
@@ -134,115 +268,116 @@ public static class AlertMapper
         var normalized = NormalizeEventString(eventType);
 
         // Tornado
-        if (Regex.IsMatch(normalized, @"\btornado\b", RegexOptions.IgnoreCase))
+        if (TornadoPattern().IsMatch(normalized))
             return AlertEventType.Tornado;
 
         // Hurricane/Typhoon/Tropical
-        if (Regex.IsMatch(normalized, @"\bhurricane\b", RegexOptions.IgnoreCase))
+        if (HurricanePattern().IsMatch(normalized))
             return AlertEventType.Hurricane;
-        if (Regex.IsMatch(normalized, @"\btyphoon\b", RegexOptions.IgnoreCase))
+        if (TyphoonPattern().IsMatch(normalized))
             return AlertEventType.Typhoon;
-        if (Regex.IsMatch(normalized, @"\btropical\s*storm\b", RegexOptions.IgnoreCase))
+        if (TropicalStormPattern().IsMatch(normalized))
             return AlertEventType.TropicalStorm;
 
         // Thunderstorm
-        if (Regex.IsMatch(normalized, @"\bsevere\s*thunderstorm\b", RegexOptions.IgnoreCase))
+        if (SevereThunderstormPattern().IsMatch(normalized))
             return AlertEventType.SevereThunderstorm;
-        if (Regex.IsMatch(normalized, @"\bthunderstorm\b", RegexOptions.IgnoreCase))
+        if (ThunderstormPattern().IsMatch(normalized))
             return AlertEventType.Thunderstorm;
 
         // Hail
-        if (Regex.IsMatch(normalized, @"\bhail\b", RegexOptions.IgnoreCase))
+        if (HailPattern().IsMatch(normalized))
             return AlertEventType.Hail;
 
         // Wind
-        if (Regex.IsMatch(normalized, @"\b(high|strong|damaging|extreme)\s*wind\b", RegexOptions.IgnoreCase))
+        if (HighWindPattern().IsMatch(normalized))
             return AlertEventType.HighWind;
-        if (Regex.IsMatch(normalized, @"\bgale\b", RegexOptions.IgnoreCase))
+        if (GalePattern().IsMatch(normalized))
             return AlertEventType.Gale;
 
         // Winter Weather
-        if (Regex.IsMatch(normalized, @"\bblizzard\b", RegexOptions.IgnoreCase))
+        if (BlizzardPattern().IsMatch(normalized))
             return AlertEventType.Blizzard;
-        if (Regex.IsMatch(normalized, @"\bwinter\s*storm\b", RegexOptions.IgnoreCase))
+        if (WinterStormPattern().IsMatch(normalized))
             return AlertEventType.WinterStorm;
-        if (Regex.IsMatch(normalized, @"\b(heavy\s*)?snow(fall)?\b", RegexOptions.IgnoreCase) && !Regex.IsMatch(normalized, @"\bavalanche\b", RegexOptions.IgnoreCase))
+        if (SnowPattern().IsMatch(normalized) && !AvalanchePattern().IsMatch(normalized))
             return AlertEventType.Snow;
-        if (Regex.IsMatch(normalized, @"\b(ice|freezing|icing)\b", RegexOptions.IgnoreCase))
+        if (IcePattern().IsMatch(normalized))
             return AlertEventType.Ice;
-        if (Regex.IsMatch(normalized, @"\b(frost|freeze)\b", RegexOptions.IgnoreCase))
+        if (FrostPattern().IsMatch(normalized))
             return AlertEventType.Frost;
-        if (Regex.IsMatch(normalized, @"\bavalanche\b", RegexOptions.IgnoreCase))
+        if (AvalanchePattern().IsMatch(normalized))
             return AlertEventType.Avalanche;
 
         // Temperature
-        if (Regex.IsMatch(normalized, @"\b(excessive|extreme)\s*heat\b", RegexOptions.IgnoreCase))
+        if (ExcessiveHeatPattern().IsMatch(normalized))
             return AlertEventType.ExcessiveHeat;
-        if (Regex.IsMatch(normalized, @"\bheat(\s*wave)?\b", RegexOptions.IgnoreCase))
+        if (HeatPattern().IsMatch(normalized))
             return AlertEventType.Heat;
-        if (Regex.IsMatch(normalized, @"\b(extreme|excessive)\s*cold\b", RegexOptions.IgnoreCase))
+        if (ExtremeColdPattern().IsMatch(normalized))
             return AlertEventType.ExtremeCold;
 
         // Flood
-        if (Regex.IsMatch(normalized, @"\bflash\s*flood\b", RegexOptions.IgnoreCase))
+        if (FlashFloodPattern().IsMatch(normalized))
             return AlertEventType.FlashFlood;
-        if (Regex.IsMatch(normalized, @"\bcoastal\s*flood\b", RegexOptions.IgnoreCase))
+        if (CoastalFloodPattern().IsMatch(normalized))
             return AlertEventType.CoastalFlood;
-        if (Regex.IsMatch(normalized, @"\bflood\b", RegexOptions.IgnoreCase))
+        if (FloodPattern().IsMatch(normalized))
             return AlertEventType.Flood;
-        if (Regex.IsMatch(normalized, @"\btsunami\b", RegexOptions.IgnoreCase))
+        if (TsunamiPattern().IsMatch(normalized))
             return AlertEventType.Tsunami;
-        if (Regex.IsMatch(normalized, @"\bstorm\s*surge\b", RegexOptions.IgnoreCase))
+        if (StormSurgePattern().IsMatch(normalized))
             return AlertEventType.StormSurge;
-        if (Regex.IsMatch(normalized, @"\bhigh\s*water\b", RegexOptions.IgnoreCase))
+        if (HighWaterPattern().IsMatch(normalized))
             return AlertEventType.HighWater;
 
         // Rain
-        if (Regex.IsMatch(normalized, @"\b(heavy|torrential)\s*rain\b", RegexOptions.IgnoreCase))
+        if (RainPattern().IsMatch(normalized))
             return AlertEventType.Rain;
 
         // Marine
-        if (Regex.IsMatch(normalized, @"\bhigh\s*surf\b", RegexOptions.IgnoreCase))
+        if (HighSurfPattern().IsMatch(normalized))
             return AlertEventType.HighSurf;
-        if (Regex.IsMatch(normalized, @"\brip\s*current\b", RegexOptions.IgnoreCase))
+        if (RipCurrentPattern().IsMatch(normalized))
             return AlertEventType.RipCurrent;
-        if (Regex.IsMatch(normalized, @"\bsmall\s*craft\b", RegexOptions.IgnoreCase))
+        if (SmallCraftPattern().IsMatch(normalized))
             return AlertEventType.SmallCraft;
 
         // Fire
-        if (Regex.IsMatch(normalized, @"\bred\s*flag\b", RegexOptions.IgnoreCase))
+        if (RedFlagPattern().IsMatch(normalized))
             return AlertEventType.RedFlag;
-        if (Regex.IsMatch(normalized, @"\b(wild)?fire\b", RegexOptions.IgnoreCase))
+        if (FirePattern().IsMatch(normalized))
             return AlertEventType.Fire;
 
         // Air Quality
-        if (Regex.IsMatch(normalized, @"\bair\s*quality\b", RegexOptions.IgnoreCase))
+        if (AirQualityPattern().IsMatch(normalized))
             return AlertEventType.AirQuality;
-        if (Regex.IsMatch(normalized, @"\bsmoke\b", RegexOptions.IgnoreCase))
+        if (SmokePattern().IsMatch(normalized))
             return AlertEventType.Smoke;
-        if (Regex.IsMatch(normalized, @"\bdust\s*storm\b", RegexOptions.IgnoreCase))
+        if (DustStormPattern().IsMatch(normalized))
             return AlertEventType.DustStorm;
-        if (Regex.IsMatch(normalized, @"\bfog\b", RegexOptions.IgnoreCase))
+        if (FogPattern().IsMatch(normalized))
             return AlertEventType.Fog;
 
         // Geophysical
-        if (Regex.IsMatch(normalized, @"\bearthquake\b", RegexOptions.IgnoreCase))
+        if (EarthquakePattern().IsMatch(normalized))
             return AlertEventType.Earthquake;
-        if (Regex.IsMatch(normalized, @"\bvolcan(o|ic)\b", RegexOptions.IgnoreCase))
+        if (VolcanoPattern().IsMatch(normalized))
             return AlertEventType.Volcano;
-        if (Regex.IsMatch(normalized, @"\b(land|mud)slide\b", RegexOptions.IgnoreCase))
+        if (LandslidePattern().IsMatch(normalized))
             return AlertEventType.Landslide;
 
         // Special
-        if (Regex.IsMatch(normalized, @"\bspecial\s*weather\s*statement\b", RegexOptions.IgnoreCase))
+        if (SpecialWeatherStatementPattern().IsMatch(normalized))
             return AlertEventType.SpecialWeatherStatement;
-        if (Regex.IsMatch(normalized, @"\bcivil\s*emergency\b", RegexOptions.IgnoreCase))
+        if (CivilEmergencyPattern().IsMatch(normalized))
             return AlertEventType.CivilEmergency;
-        if (Regex.IsMatch(normalized, @"\bhazardous\s*materials\b", RegexOptions.IgnoreCase))
+        if (HazardousMaterialsPattern().IsMatch(normalized))
             return AlertEventType.HazardousMaterials;
-        if (Regex.IsMatch(normalized, @"\bnuclear\s*power\s*plant\b", RegexOptions.IgnoreCase))
+        if (NuclearPowerPlantPattern().IsMatch(normalized))
             return AlertEventType.NuclearPowerPlant;
 
+        // If no specific match is found, return Other
         return AlertEventType.Other;
     }
 
@@ -252,11 +387,12 @@ public static class AlertMapper
     private static string NormalizeEventString(string eventType)
     {
         // Remove extra whitespace and common punctuation
-        var normalized = Regex.Replace(eventType, @"\s+", " ").Trim();
+        var normalized = WhitespacePattern().Replace(eventType, " ").Trim();
 
         // Remove common suffixes
-        normalized = Regex.Replace(normalized, @"\b(warning|watch|advisory|statement|alert)\b", "", RegexOptions.IgnoreCase);
+        normalized = CommonSuffixPattern().Replace(normalized, "");
 
+        // Remove any remaining non-alphanumeric characters except spaces
         return normalized.Trim();
     }
 

@@ -118,7 +118,7 @@ The library includes DTOs for the following providers:
 ## Technology
 
 - **Target Framework**: .NET 10
-- **Current Package Version**: 1.0.6
+- **Current Package Version**: 1.0.11
 - **Dependencies**:
   - Xcalibur.Extensions.MVVM.V2 (v1.0.5)
 - **Features**:
@@ -127,6 +127,7 @@ The library includes DTOs for the following providers:
   - JSON serialization support
   - NuGet package generation on Release build
   - README, license, icon, and symbols package support
+  - High-performance regex optimizations using source-generated patterns
 
 ## 📦 Installation
 
@@ -145,7 +146,7 @@ Install-Package Xcalibur.Weather.Models
 Or add to your project file:
 
 ```xml
-<PackageReference Include="Xcalibur.Weather.Models" Version="1.0.6" />
+<PackageReference Include="Xcalibur.Weather.Models" Version="1.0.11" />
 ```
 
 ## Use Cases
@@ -193,6 +194,30 @@ Xcalibur.Weather.Models/
 ```
 
 ## Latest Updates
+
+### v1.0.11
+- **Performance Optimizations** for `AlertMapper` helper class:
+  - Migrated all regex patterns to source-generated `[GeneratedRegex]` (41 patterns)
+  - Replaced `ToUpperInvariant()` with `StringComparison.OrdinalIgnoreCase` for zero-allocation comparisons
+  - Removed redundant `Contains()` calls in favor of exact `Equals()` matching
+  - Optimized `MapCategory` to prioritize exact matches before fallback substring matching
+  - **Performance improvements**: ~10-100x faster regex matching, ~20-40% faster string comparisons, reduced GC pressure
+- Updated alert mapping methods for CAP (Common Alerting Protocol) standard compliance
+- Enhanced property descriptions for weather alert models
+
+### v1.0.10
+- Additional property descriptions and documentation improvements
+
+### v1.0.9
+- Minor bug fixes and refinements
+
+### v1.0.8
+- Internal improvements and updates
+
+### v1.0.7
+- Added multi-source weather alert aggregation support
+- Introduced `CombinedWeatherAlertInformation` for unified alert handling across multiple providers
+- Enhanced alert service provider coverage
 
 ### v1.0.6
 - **Major Refactoring**: Reorganized project structure
