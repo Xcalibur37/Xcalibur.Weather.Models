@@ -187,8 +187,7 @@ public class DailyForecastPoint : BaseForecastPoint
 
         // Weather codes
         WeatherCode = data.WeatherCodes?[index];
-        WeatherCodeValue = data.WeatherCodeValues?[index];
-
+        
         // Temp starts in Celsius by default.
         HighTemp = data.TemperatureMax?[index];
         LowTemp = data.TemperatureMin?[index];

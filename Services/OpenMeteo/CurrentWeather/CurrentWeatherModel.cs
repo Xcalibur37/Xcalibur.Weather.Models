@@ -96,24 +96,7 @@ namespace Xcalibur.Weather.Models.Services.OpenMeteo.CurrentWeather
         /// The weather code.
         /// </value>
         [JsonPropertyName("weather_code")]
-        public int? WeatherCode
-        {
-            get;
-            set
-            {
-                field = value;
-                if (value == null) return;
-                WeatherCodeValue = WeatherCode.GetWeatherCodeDescription();
-            }
-        }
-
-        /// <summary>
-        /// Gets or sets the weather code value.
-        /// </summary>
-        /// <value>
-        /// The weather code value.
-        /// </value>
-        public string? WeatherCodeValue { get; set; }
+        public int? WeatherCode { get; set; }
 
         /// <summary>
         /// Gets or sets the cloud cover.

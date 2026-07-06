@@ -24,27 +24,6 @@ namespace Xcalibur.Weather.Models.Services.OpenMeteo.Base
         /// The weather codes.
         /// </value>
         [JsonPropertyName("weather_code")]
-        public int?[]? WeatherCodes
-        {
-            get;
-            set
-            {
-                field = value;
-                if (value == null) return;
-                WeatherCodeValues = new string[value.Length];
-                for (var i = 0; i < value.Length; i++)
-                {
-                    WeatherCodeValues[i] = value[i].GetWeatherCodeDescription();
-                }
-            }
-        }
-
-        /// <summary>
-        /// Gets or sets the weather code values.
-        /// </summary>
-        /// <value>
-        /// The weather code values.
-        /// </value>
-        public string[]? WeatherCodeValues { get; set; }
+        public int?[]? WeatherCodes { get; set; } = [];
     }
 }

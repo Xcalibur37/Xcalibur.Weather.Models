@@ -118,7 +118,7 @@ The library includes DTOs for the following providers:
 ## Technology
 
 - **Target Framework**: .NET 10
-- **Current Package Version**: 1.0.11
+- **Current Package Version**: 1.0.12
 - **Dependencies**:
   - Xcalibur.Extensions.MVVM.V2 (v1.0.5)
 - **Features**:
@@ -146,7 +146,7 @@ Install-Package Xcalibur.Weather.Models
 Or add to your project file:
 
 ```xml
-<PackageReference Include="Xcalibur.Weather.Models" Version="1.0.11" />
+<PackageReference Include="Xcalibur.Weather.Models" Version="1.0.12" />
 ```
 
 ## Use Cases
@@ -194,6 +194,12 @@ Xcalibur.Weather.Models/
 ```
 
 ## Latest Updates
+
+### v1.0.12
+- **Breaking Change**: Retired `WeatherCode` property for multi-language compatibility
+  - Weather code descriptions are language-specific and should be handled by localization services
+  - Consumers should use raw weather code values with their own localization
+- Improved model flexibility for international applications
 
 ### v1.0.11
 - **Performance Optimizations** for `AlertMapper` helper class:

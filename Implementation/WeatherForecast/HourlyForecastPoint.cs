@@ -211,8 +211,7 @@ namespace Xcalibur.Weather.Models.Implementation.WeatherForecast
 
             // Weather codes
             WeatherCode = data.WeatherCodes?[index];
-            WeatherCodeValue = data.WeatherCodeValues?[index];
-
+            
             // Temp starts in Celsius by default.
             Temperature = data.Temperature2m?[index];
             ApparentTemperature = data.ApparentTemperature?[index];
