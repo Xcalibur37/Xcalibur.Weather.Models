@@ -202,54 +202,93 @@ namespace Xcalibur.Weather.Models.Implementation.WeatherForecast
         /// <param name="isCurrent">if set to <c>true</c> [is current].</param>
         private void Map(HourlyWeatherModel? data, int index, bool isCurrent = false)
         {
-            if (data is null) return;
-            
+            // Validate index bounds for primary time array
+            if (data?.Time is null || index < 0 || index >= data.Time.Length) return;
+
             // Map data to forecast point
             var dateValue = data.Time[index];
             DateValue = dateValue;
             DateObject = DateTime.Parse(dateValue!);
 
             // Weather codes
-            WeatherCode = data.WeatherCodes?[index];
-            
+            WeatherCode = data.WeatherCodes is not null && index < data.WeatherCodes.Length 
+                ? data.WeatherCodes[index] 
+                : null;
+
             // Temp starts in Celsius by default.
-            Temperature = data.Temperature2m?[index];
-            ApparentTemperature = data.ApparentTemperature?[index];
+            Temperature = data.Temperature2m is not null && index < data.Temperature2m.Length 
+                ? data.Temperature2m[index] 
+                : null;
+            ApparentTemperature = data.ApparentTemperature is not null && index < data.ApparentTemperature.Length 
+                ? data.ApparentTemperature[index] 
+                : null;
 
             // Humidity
-            RelativeHumidity = data.RelativeHumidity2m?[index];
+            RelativeHumidity = data.RelativeHumidity2m is not null && index < data.RelativeHumidity2m.Length 
+                ? data.RelativeHumidity2m[index] 
+                : null;
 
             // Dew Point
-            DewPoint = data.DewPoint2m?[index];
+            DewPoint = data.DewPoint2m is not null && index < data.DewPoint2m.Length 
+                ? data.DewPoint2m[index] 
+                : null;
 
             // Precipitation
-            PrecipitationProbability = data.PrecipitationProbability?[index];
-            Precipitation = data.Precipitation?[index];
-            Rain = data.Rain?[index];
-            Showers = data.Showers?[index];
-            Snowfall = data.Snowfall?[index];
-            SnowDepth = data.SnowDepth?[index];
+            PrecipitationProbability = data.PrecipitationProbability is not null && index < data.PrecipitationProbability.Length 
+                ? data.PrecipitationProbability[index] 
+                : null;
+            Precipitation = data.Precipitation is not null && index < data.Precipitation.Length 
+                ? data.Precipitation[index] 
+                : null;
+            Rain = data.Rain is not null && index < data.Rain.Length 
+                ? data.Rain[index] 
+                : null;
+            Showers = data.Showers is not null && index < data.Showers.Length 
+                ? data.Showers[index] 
+                : null;
+            Snowfall = data.Snowfall is not null && index < data.Snowfall.Length 
+                ? data.Snowfall[index] 
+                : null;
+            SnowDepth = data.SnowDepth is not null && index < data.SnowDepth.Length 
+                ? data.SnowDepth[index] 
+                : null;
 
             // Pressure
-            PressureMsl = data.PressureMsl?[index];
-            SurfacePressure = data.SurfacePressure?[index];
+            PressureMsl = data.PressureMsl is not null && index < data.PressureMsl.Length 
+                ? data.PressureMsl[index] 
+                : null;
+            SurfacePressure = data.SurfacePressure is not null && index < data.SurfacePressure.Length 
+                ? data.SurfacePressure[index] 
+                : null;
 
             // Cloud Cover
-            CloudCover = data.CloudCover?[index];
+            CloudCover = data.CloudCover is not null && index < data.CloudCover.Length 
+                ? data.CloudCover[index] 
+                : null;
 
             // Visibility
-            Visibility = data.Visibility?[index];
+            Visibility = data.Visibility is not null && index < data.Visibility.Length 
+                ? data.Visibility[index] 
+                : null;
 
             // Wind
-            WindSpeed = data.WindSpeed10m?[index];
-            WindDirection = data.WindDirection10m?[index];
-            WindGust = data.WindGusts10m?[index];
+            WindSpeed = data.WindSpeed10m is not null && index < data.WindSpeed10m.Length 
+                ? data.WindSpeed10m[index] 
+                : null;
+            WindDirection = data.WindDirection10m is not null && index < data.WindDirection10m.Length 
+                ? data.WindDirection10m[index] 
+                : null;
+            WindGust = data.WindGusts10m is not null && index < data.WindGusts10m.Length 
+                ? data.WindGusts10m[index] 
+                : null;
 
             // UV Index
-            UVIndex = data.UVIndex?[index];
+            UVIndex = data.UVIndex is not null && index < data.UVIndex.Length 
+                ? data.UVIndex[index] 
+                : null;
 
             // Is Day Time
-            IsDayTime = data.IsDay?[index] == 1;
+            IsDayTime = data.IsDay is not null && index < data.IsDay.Length && data.IsDay[index] == 1;
 
             // Is Current
             IsCurrent = isCurrent;
